@@ -2,8 +2,6 @@
 import AppLayout from '../../Layouts/AppLayout.vue';
 
 import Pagination from '../../Components/Pagination.vue';
-//import PrimaryButton from '../../Components/PrimaryButton.vue';
-//import SecondaryButton from '../../Components/SecondaryButton.vue';
 
 import TextInput from '../../Components/TextInput.vue';
 
@@ -17,11 +15,13 @@ import {
     PlusSmallIcon, PlusIcon, PencilIcon, TrashIcon
 } from '@heroicons/vue/24/solid';
 
+import Success from '../../Components/alerts/Success.vue';
+
 const defaultFormObject = {
     name: null
 };
 
-export default{
+export default(await import('vue')).defineComponent({
     name: 'Companies',
     props: ['data'],
     components: {
@@ -79,7 +79,7 @@ export default{
             console.log('deleteItem', this.formObject);
         },
     }
-}
+});
 
 </script>
 
@@ -96,15 +96,7 @@ export default{
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
 
                     <!-- Üzenetek -->
-                    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" 
-                        role="alert" 
-                        v-if="$page.props.flash.message">
-                        <div class="flex">
-                            <div>
-                                <p class="text-sm">{{ $page.props.flash.message }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <Success :message="$page.props.flash.message" v-if="$page.props.flash.message"/>
 
                     <!-- NEW button -->
                     <PrimaryButton 
