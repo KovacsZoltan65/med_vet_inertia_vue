@@ -121,6 +121,14 @@ const logout = () => {
                                                                 </NavLink>
                                                             </li>
 
+                                                            <!-- OFFICE TYPES -->
+                                                            <li>
+                                                                <NavLink :href="route('office_types')" :active="route().current('office_types')">
+                                                                    <OfficeIcon class="w-4 h-4" />
+                                                                    <span>Office Types</span>
+                                                                </NavLink>
+                                                            </li>
+
                                                             <!-- OFFICES -->
                                                             <li>
                                                                 <NavLink :href="route('offices')" :active="route().current('offices')">
