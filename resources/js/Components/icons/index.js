@@ -1,0 +1,1 @@
+export { default as ArrowRightOnRectangleIcon } from './ArrowRightOnRectangleIcon.vue';
