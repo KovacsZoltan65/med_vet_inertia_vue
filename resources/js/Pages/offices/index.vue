@@ -2,19 +2,15 @@
 import AppLayout from '../../Layouts/AppLayout.vue';
 
 import Pagination from '../../Components/Pagination.vue';
-//import PrimaryButton from '../../Components/PrimaryButton.vue';
-//import SecondaryButton from '../../Components/SecondaryButton.vue';
-
-
-
 import DialogModal from '../../Components/DialogModal.vue';
 import OfficeForm from './form.vue';
 
 import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
 import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
+import Success from '../../Components/alerts/Success.vue';
 
 import {
-    PlusSmallIcon, PlusIcon, PencilIcon, TrashIcon
+    PlusIcon, PencilIcon, TrashIcon, CircleStackIcon
 } from '@heroicons/vue/24/solid';
 
 const defaultFormObject = {
@@ -31,7 +27,8 @@ export default(await import('vue')).defineComponent({
         SecondaryButton,
         DialogModal,
         OfficeForm,
-        PlusIcon, PlusSmallIcon, PencilIcon, TrashIcon
+        PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
+        Success
     },
     data(){
         return {
@@ -44,7 +41,6 @@ export default(await import('vue')).defineComponent({
     created(){},
     methods: {
         openForm(item){
-            //console.log(item);
             this.isEdit = !!item;
             this.formObject = item ? Object.assign({}, item) : defaultFormObject;
             this.showModal = true;
@@ -65,7 +61,7 @@ export default(await import('vue')).defineComponent({
                 item._method = 'PUT';
             }
 
-            this.$inertia.post(url, this.formObject, {
+            this.$inertia.post(url, item, {
                 onError: (err) => { console.log('err', err); },
                 onSuccess: () => {
                     this.closeForm();
@@ -95,15 +91,7 @@ export default(await import('vue')).defineComponent({
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
 
                     <!-- Üzenetek -->
-                    <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" 
-                        role="alert" 
-                        v-if="$page.props.flash.message">
-                        <div class="flex">
-                            <div>
-                                <p class="text-sm">{{ $page.props.flash.message }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <Success :message="$page.props.flash.message" v-if="$page.props.flash.message"/>
 
                     <!-- NEW button -->
                     <PrimaryButton 
