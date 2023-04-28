@@ -16,7 +16,7 @@ class OfficeTypeController extends Controller
     {
         $data = OfficeType::query()->paginate(10);
 
-        return Inertia::render('office_type/index', [
+        return Inertia::render('office_types/index', [
             'data' => $data
         ]);
     }
@@ -41,9 +41,9 @@ class OfficeTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOfficeTypeRequest $request, OfficeType $office)
+    public function update(UpdateOfficeTypeRequest $request, OfficeType $office_type)
     {
-        $office->update($request->all());
+        $office_type->update($request->all());
 
         return redirect()
             ->back()

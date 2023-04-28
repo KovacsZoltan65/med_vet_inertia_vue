@@ -9,5 +9,5 @@ class OfficeType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'type_id'];
+    protected $fillable = ['name'];
 }
