@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Office;
 use App\Http\Requests\StoreOfficeRequest;
 use App\Http\Requests\UpdateOfficeRequest;
+use App\Models\OfficeType;
 use Inertia\Inertia;
 
 class OfficeController extends Controller
@@ -15,9 +16,15 @@ class OfficeController extends Controller
     public function index()
     {
         $data = Office::query()->paginate(10);
+        //dd($data);
 
+        foreach($data as $office){
+            $office->type_name = $office->type->name;
+        }
+        
         return Inertia::render('offices/index', [
-            'data' => $data
+            'filters' => 'filters',
+            'data' => $data,
         ]);
     }
 
