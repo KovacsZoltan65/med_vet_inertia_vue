@@ -61,4 +61,9 @@ class OfficeTypeController extends Controller
             ->back()
             ->with('message', 'Office Type deleted');
     }
+
+    public function getOfficeTypes(){
+        $data = OfficeType::all();
+        return $data;
+    }
 }

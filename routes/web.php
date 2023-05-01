@@ -48,6 +48,7 @@ Route::middleware([
     ]);
 
     // OFFICE TYPES
+    Route::get('/get_office_types', [OfficeTypeController::class, 'getOfficeTypes'])->name('get_office_types');
     Route::resource('/office_types', OfficeTypeController::class)->names([
         'index' => 'office_types',
     ]);
