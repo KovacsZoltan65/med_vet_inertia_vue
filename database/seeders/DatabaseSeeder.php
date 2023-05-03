@@ -19,7 +19,12 @@ class DatabaseSeeder extends Seeder
             //CompanySeeder::class,
             //OfficeSeeder::class,
             //OfficeTypeSeeder::class
-            HumanTypeSeeder::class
+            //HumanTypeSeeder::class
+            
+            PostSeeder::class,
+            
+            SpeciesSeeder::class,
+            AnimalSeeder::class,
         ]);
     }
 }
