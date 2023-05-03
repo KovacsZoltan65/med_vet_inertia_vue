@@ -16,7 +16,7 @@ class OfficeController extends Controller
     public function index()
     {
         $data = Office::query()->paginate(10);
-        //dd($data);
+        $types = OfficeType::all();
 
         foreach($data as $office){
             $office->type_name = $office->type->name;
@@ -25,6 +25,7 @@ class OfficeController extends Controller
         return Inertia::render('offices/index', [
             'filters' => 'filters',
             'data' => $data,
+            'types' => $types
         ]);
     }
 

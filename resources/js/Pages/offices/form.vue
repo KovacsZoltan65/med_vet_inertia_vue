@@ -1,3 +1,20 @@
+<script>
+    import InputLabel from '@/MyComponents/InputLabel.vue';
+    import TextInput from '@/MyComponents/TextInput.vue';
+    import InputError from '@/MyComponents/InputError.vue';
+
+    export default(await import('vue')).defineComponent({
+        name: 'OfficeForm',
+        props: ['form', 'officeTypes', 'isEdit'],
+        components: {
+            InputLabel, 
+            TextInput, 
+            InputError
+        },
+        created(){},
+    });
+</script>
+
 <template>
     <form>
 
@@ -20,7 +37,7 @@
                     <option v-for="option in officeTypes" 
                         :key="option.id" 
                         :value="option.id"
-                        :selectedValue="id"
+                        :selectedValue="form.id"
                     >{{ option.name }}</option>
                 </select>
 
@@ -31,19 +48,3 @@
 
     </form>
 </template>
-
-<script>
-import InputLabel from '../../MyComponents/InputLabel.vue';
-import TextInput from '../../MyComponents/TextInput.vue';
-import InputError from '../../MyComponents/InputError.vue';
-
-export default(await import('vue')).defineComponent({
-    name: 'OfficeForm',
-    props: ['form', 'officeTypes', 'isEdit'],
-    components: {
-        InputLabel, 
-        TextInput, 
-        InputError
-    }
-});
-</script>
