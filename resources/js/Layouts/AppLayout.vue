@@ -11,6 +11,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
 import CompaniesIcon from '../Components/icons/CompaniesIcon.vue';
 import OfficeIcon from '../Components/icons/OfficeIcon.vue';
+import { AcademicCapIcon, UsersIcon } from '@heroicons/vue/24/solid';
 
 defineProps({
     title: String,
@@ -90,6 +91,8 @@ const logout = () => {
                                                     <div class="p-4 pb-0 text-gray-900 md:pb-4 dark:text-white">
                                                         <ul class="space-y-4"
                                                             aria-labelledby="mega-menu-icons-dropdown-button">
+
+                                                            <!-- BOOKS -->
                                                             <li>
                                                                 <NavLink :href="route('books')" 
                                                                     :active="route().current('books')">
@@ -101,6 +104,8 @@ const logout = () => {
                                                                     <span>Books</span>
                                                                 </NavLink>
                                                             </li>
+
+                                                            <!-- BOOKS 2 -->
                                                             <li>
                                                                 <NavLink :href="route('books2')" 
                                                                     :active="route().current('books2')">
@@ -137,7 +142,23 @@ const logout = () => {
                                                                 </NavLink>
                                                             </li>
 
+                                                            <!-- POSTS -->
                                                             <li>
+                                                                <NavLink :href="route('posts')" :active="route().current('posts')">
+                                                                    <AcademicCapIcon class="w-4 h-4" />&nbsp;
+                                                                    <span>Posts</span>
+                                                                </NavLink>
+                                                            </li>
+
+                                                            <!-- HUMANS -->
+                                                            <li>
+                                                                <NavLink :href="route('humans')" :active="route().current('humans')">
+                                                                    <UsersIcon class="w-4 h-4" />&nbsp;
+                                                                    <span>Humans</span>
+                                                                </NavLink>
+                                                            </li>
+
+                                                            <!--<li>
                                                                 <a href="#"
                                                                     class="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 group">
                                                                     <span class="sr-only">Library</span>
@@ -151,7 +172,7 @@ const logout = () => {
                                                                     </svg>
                                                                     Library
                                                                 </a>
-                                                            </li>
+                                                            </li>-->
                                                             <li>
                                                                 <a href="#"
                                                                     class="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 group">
