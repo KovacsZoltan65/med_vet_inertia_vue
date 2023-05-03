@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HumanController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\OfficeTypeController;
-
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SpeciesController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -75,6 +76,20 @@ Route::middleware([
     
     Route::resource('/humans', HumanController::class)->names([
         'index' => 'humans',
+    ]);
+    
+    // -------------
+    // ANIMALS
+    // -------------
+    Route::resource('/animals', AnimalController::class)->names([
+        'index' => 'animals',
+    ]);
+    
+    // -------------
+    // SPECIES
+    // -------------
+    Route::resource('species', SpeciesController::class)->names([
+        'index' => 'species',
     ]);
 
     // BOOKS
