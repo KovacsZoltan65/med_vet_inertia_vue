@@ -1,3 +1,75 @@
+<script>
+
+    const defaultFormObject = {
+        title: null, author: null, image: null
+    };
+
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import Pagination from '@/Components/Pagination.vue';
+    import BookForm from '@/Components/Book/Form.vue';
+
+    export default {
+        props: ['data'],
+        components: {
+            AppLayout,
+            Pagination,
+            BookForm
+        },
+        data() {
+            return {
+                isFormOpen: false,
+                isFormEdit: false,
+                formObject: defaultFormObject
+            }
+        },
+        methods: {
+            
+            image_path(image){
+                return '/' + image;
+            },
+
+            saveItem(item) {
+                let url = '/books';
+
+                if(item.id){
+                    url = `/books/${item.id}`;
+                    item._method = 'PUT';
+                }
+                
+                //console.log(item);
+                
+                this.$inertia.post(url, item, {
+                    onError: () => {},
+                    onSuccess: () => {
+                        this.closeModal();
+                    }
+                });
+                 
+            },
+
+            closeModal(){
+                this.isFormOpen = false;
+            },
+
+            openForm(item){
+                this.isFormOpen = true;
+                this.isFormEdit = !!item;
+                this.formObject = item ? Object.assign({}, item) : defaultFormObject;
+                this.$page.props.errors = {};
+            },
+
+            deleteItem(item){
+                if(window.confirm('are you sure?')){
+                    this.$inertia.post('/books/'+item.id, {
+                        _method: 'DELETE'
+                    });
+                }
+            }
+        }
+    }
+
+</script>
+
 <template>
     <AppLayout title="Books">
 
@@ -66,7 +138,10 @@
                         </tbody>
                     </table>
 
+                    <!-- PAGINATE -->
                     <pagination :links="data.links"></pagination>
+
+                    <!-- MODAL -->
                     <book-form :isOpen="isFormOpen" 
                         :isEdit="isFormEdit" 
                         :form="formObject" 
@@ -80,72 +155,3 @@
 
     </AppLayout>
 </template>
-
-<script>
-
-    const defaultFormObject = {
-        title: null, author: null, image: null
-    };
-
-    import AppLayout from '@/Layouts/AppLayout.vue';
-    import Pagination from '@/Components/Pagination.vue';
-    import BookForm from '@/Components/Book/Form.vue';
-
-    export default {
-        props: ['data'],
-        components: {
-            AppLayout,
-            Pagination,
-            BookForm
-        },
-        data() {
-            return {
-                isFormOpen: false,
-                isFormEdit: false,
-                formObject: defaultFormObject
-            }
-        },
-        methods: {
-            
-            image_path(image){
-                return '/' + image;
-            },
-
-            saveItem(item) {
-                let url = '/books';
-
-                if(item.id){
-                    url = `/books/${item.id}`;
-                    item._method = 'PUT';
-                }
-                
-                this.$inertia.post(url, item, {
-                    onError: () => {},
-                    onSuccess: () => {
-                        this.closeModal();
-                    }
-                });  
-            },
-
-            closeModal(){
-                this.isFormOpen = false;
-            },
-
-            openForm(item){
-                this.isFormOpen = true;
-                this.isFormEdit = !!item;
-                this.formObject = item ? Object.assign({}, item) : defaultFormObject;
-                this.$page.props.errors = {};
-            },
-
-            deleteItem(item){
-                if(window.confirm('are you sure?')){
-                    this.$inertia.post('/books/'+item.id, {
-                        _method: 'DELETE'
-                    });
-                }
-            }
-        }
-    }
-
-</script>

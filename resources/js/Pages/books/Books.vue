@@ -2,10 +2,8 @@
 import AppLayout from '../../Layouts/AppLayout.vue';
 
 import Pagination from '../../Components/Pagination.vue';
-//import PrimaryButton from '../../Components/PrimaryButton.vue';
-//import SecondaryButton from '../../Components/SecondaryButton.vue';
 
-import TextInput from '../../Components/TextInput.vue';
+//import TextInput from '../../Components/TextInput.vue';
 
 import DialogModal from '../../Components/DialogModal.vue';
 import BooksForm from './BooksForm.vue';
@@ -30,7 +28,7 @@ export default{
         PrimaryButton,
         SecondaryButton,
         DialogModal,
-        TextInput,
+        //TextInput,
         BooksForm,
         PlusIcon, PlusSmallIcon, PencilIcon, TrashIcon
     },
@@ -65,18 +63,23 @@ export default{
                 url += `/${item.id}`;
                 item._method = 'PUT';
             }
-
+            console.log(item);
+            /*
             this.$inertia.post(url, this.formObject, {
                 onError: (err) => { console.log('err', err); },
                 onSuccess: () => {
                     this.closeForm();
                 }
             });
-            
+            */
         },
 
-        deleteItem(){
-            console.log('deleteItem', this.formObject);
+        deleteItem(item){
+            if(window.confirm('are you sure?')){
+                this.$inertia.post('/humans/' + item.id, {
+                    _method: 'DELETE'
+                });
+            }
         },
     }
 }
