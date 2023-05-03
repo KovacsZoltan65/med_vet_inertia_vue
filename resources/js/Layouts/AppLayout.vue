@@ -11,7 +11,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
 import CompaniesIcon from '../Components/icons/CompaniesIcon.vue';
 import OfficeIcon from '../Components/icons/OfficeIcon.vue';
-import { AcademicCapIcon, UsersIcon } from '@heroicons/vue/24/solid';
+import { AcademicCapIcon, UsersIcon, EyeDropperIcon } from '@heroicons/vue/24/solid';
 
 defineProps({
     title: String,
@@ -158,6 +158,14 @@ const logout = () => {
                                                                 </NavLink>
                                                             </li>
 
+                                                            <!-- SPECIES -->
+                                                            <li>
+                                                                <NavLink :href="route('species')" :active="route().current('species')">
+                                                                    <EyeDropperIcon class="w-4 h-4" />&nbsp;
+                                                                    <span>Species</span>
+                                                                </NavLink>
+                                                            </li>
+
                                                             <!--<li>
                                                                 <a href="#"
                                                                     class="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 group">
@@ -173,7 +181,7 @@ const logout = () => {
                                                                     Library
                                                                 </a>
                                                             </li>-->
-                                                            <li>
+                                                            <!--<li>
                                                                 <a href="#"
                                                                     class="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 group">
                                                                     <span class="sr-only">Resources</span>
@@ -187,7 +195,7 @@ const logout = () => {
                                                                     </svg>
                                                                     Resources
                                                                 </a>
-                                                            </li>
+                                                            </li>-->
                                                             <li>
                                                                 <a href="#"
                                                                     class="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 group">
