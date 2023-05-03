@@ -2,11 +2,12 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CompanyController;
-
+use App\Http\Controllers\HumanController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\OfficeTypeController;
 
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -58,6 +59,24 @@ Route::middleware([
         'index' => 'offices',
     ]);
 
+    // POSTS
+    Route::get('/get_posts', [PostController::class, 'getPosts'])->name('get_posts');
+    Route::resource('/posts', PostController::class)->names([
+        'index' => 'posts',
+    ]);
+
+    // -------------
+    // HUMANS
+    // -------------
+    // Image Upload
+    Route::post('/upload-humans', [HumanController::class, 'upload']);
+    // Image delete
+    Route::post('/upload-humans-revert', [HumanController::class, 'uploadRevert']);
+    
+    Route::resource('/humans', HumanController::class)->names([
+        'index' => 'humans',
+    ]);
+
     // BOOKS
     Route::resource('books', BookController::class)
         ->names([
@@ -66,7 +85,7 @@ Route::middleware([
     
     // Image Upload
     Route::post('/upload-books', [BookController::class, 'upload']);
-    //
+    // Image delete
     Route::post('/upload-books-revert', [BookController::class, 'uploadRevert']);
 
     // BOOKS 2
