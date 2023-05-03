@@ -44,9 +44,7 @@
 
                             <!-- Image -->
                             <div class="mb-4">
-                                <label for="formBookImage" 
-                                    class="block text-gray-700 text-sm font-bold mb-2"
-                                >Image:</label>
+                                <label for="formBookImage" class="block text-gray-700 text-sm font-bold mb-2">Image:</label>
                                 
                                 <file-pond name="imageFilepond" ref="pond"
                                     v-bind:allow-multiple="false"
