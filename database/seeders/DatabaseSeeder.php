@@ -17,8 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             //BookSeeder::class,
             //CompanySeeder::class,
-            OfficeSeeder::class,
-            OfficeTypeSeeder::class
+            //OfficeSeeder::class,
+            //OfficeTypeSeeder::class
+            HumanTypeSeeder::class
         ]);
     }
 }
