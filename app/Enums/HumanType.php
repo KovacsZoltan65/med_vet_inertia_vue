@@ -53,25 +53,26 @@ enum HumanType: int {
     public function isRecepcios() : bool{ return $this === static::RECEPCIOS; }
     public function isBeteghordo() : bool{ return $this === static::BETEGHORDO; }
     
-    public function getLabelText(): string {
+    public function getLabelText(): string
+    {
         return match($this){
-            self::ADMIN => 'Admin',
-            self::USER => 'Recepció',
-            self::ORVOS => 'Váró',
-            self::ASSZISZTENS => 'Kötöző',
-            self::RECEPCIOS => 'Megfigyelő',
-            self::BETEGHORDO => 'Műtő',
+                  self::ADMIN => 'Admin',
+                   self::USER => 'User',
+                  self::ORVOS => 'Orvos',
+            self::ASSZISZTENS => 'Asszisztens',
+              self::RECEPCIOS => 'Recepciós',
+             self::BETEGHORDO => 'Beteghordó',
         };
     }
     
     public function getLabelColor() : string{
         return match($this){
-            self::ADMIN => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-            self::USER => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-            self::ORVOS => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                  self::ADMIN => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                   self::USER => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                  self::ORVOS => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
             self::ASSZISZTENS => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-            self::RECEPCIOS => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-            self::BETEGHORDO => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+              self::RECEPCIOS => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+             self::BETEGHORDO => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
         };
     }
     
