@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
+use App\Enums\OfficeType;
 use App\Http\Requests\StoreOfficeRequest;
 use App\Http\Requests\UpdateOfficeRequest;
-use App\Models\OfficeType;
+use App\Models\Office;
 use Inertia\Inertia;
 
 class OfficeController extends Controller
@@ -16,15 +16,24 @@ class OfficeController extends Controller
     public function index()
     {
         $data = Office::query()->paginate(10);
-        $types = OfficeType::all();
+        
+        //$types = OfficeType::all();
 
         foreach($data as $office){
-            $office->type_name = $office->type->name;
+            $office->type_name = OfficeType::from($office->type_id)->getLabelText();
+            $office->type_color = OfficeType::from($office->type_id)->getLabelColor();
+            $office->type_label = OfficeType::from($office->type_id)->getLabelHTML();
         }
         
-        return Inertia::render('offices/index', [
+        $types = OfficeType::toArray();
+        
+        //foreach($data as $office){
+        //    $office->type_name = $office->type->name;
+        //}
+        
+        return Inertia::render('offices/officeIndex', [
             'filters' => 'filters',
-            'data' => $data,
+            'data' => $data, 
             'types' => $types
         ]);
     }

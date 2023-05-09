@@ -16,9 +16,12 @@ class AnimalFactory extends Factory
      */
     public function definition(): array
     {
+        $sex = fake()->randomFloat(0, 1, 2);
+        
         return [
-            'name' => fake()->firstName(),
-            'spec_id' => 1,
+            'name' => fake()->firstName($sex),
+            'sex' => $sex,
+            'group' => fake()->randomFloat(0, 1, 2),
         ];
     }
 }

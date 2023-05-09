@@ -3,7 +3,7 @@
 
     import Pagination from '../../Components/Pagination.vue';
     import DialogModal from '../../Components/DialogModal.vue';
-    import TypeForm from './form.vue';
+    import OfficeForm from './officeForm.vue';
 
     import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
     import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
@@ -20,17 +20,18 @@
     import Success from '../../Components/alerts/Success.vue';
 
     const defaultTypeObject = {
-        name: null
+        id: 0, name: null, type_id: 0
     };
 
     export default (await import('vue')).defineComponent({
-        name: 'Office Types',
-        props: ['data'],
+        name: 'Offices',
+        props: ['data', 'types'],
+
         components: {
             AppLayout,
             Pagination,
             DialogModal,
-            TypeForm,
+            OfficeForm,
             PrimaryButton, SecondaryButton, 
             AddButton, EditButton, DeleteButton,
             PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
@@ -42,13 +43,20 @@
                 showModal: false,
                 isEdit: false,
                 formObject: defaultTypeObject,
+                officeTypes: [],
 
                 selected: [],
                 selectAll: false,
             }
         },
         mounted() { },
-        created() { },
+        created() { 
+            //console.log(this.data.data[0]);
+            //console.log(this.types[0]);
+
+            this.officeTypes = this.types;
+            //this.getTypes();
+        },
         methods: {
             
             select(){
@@ -59,6 +67,16 @@
                     }
                 }
             },
+            /*
+            getTypes(){
+
+                axios.get('/get_office_types')
+                    .then(res => {
+                        this.officeTypes = res.data;
+                    })
+                    .catch(err => { console.log(err); });
+            },
+            */
 
             openForm(item) {
                 this.isEdit = !!item;
@@ -67,12 +85,14 @@
 
                 this.$page.props.errors = {};
             },
+
             closeForm() {
                 this.showModal = false;
                 this.formObject = defaultTypeObject;
             },
+
             saveItem(item) {
-                let url = '/office_types';
+                let url = '/offices';
                 if (item.id) {
                     url += `/${item.id}`;
                     item._method = 'PUT';
@@ -86,6 +106,7 @@
                 });
 
             },
+            
             deleteItem() {
                 console.log('deleteItem', this.formObject);
             },
@@ -94,10 +115,10 @@
 </script>
 
 <template>
-    <AppLayout title="Office Types">
+    <AppLayout title="Offices">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Office Types
+                Offices
             </h2>
         </template>
 
@@ -113,7 +134,7 @@
                         <PlusIcon class="h-5 w-5" />
                     </AddButton>
 
-                    <!-- Book list -->
+                    <!-- Office list -->
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         
                         <div class="text-uppercase text-bold">id selected: {{selected}}</div>
@@ -135,6 +156,8 @@
                                     </th>
                                     <!-- NAME -->
                                     <th scope="col" class="px-6 py-3">Name</th>
+                                    <!-- TYPE -->
+                                    <th scope="col" class="px-6 py-3">Type</th>
                                     <!-- ACTION -->
                                     <th scope="col" class="px-6 py-3">Action</th>
                                 </tr>
@@ -158,6 +181,11 @@
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ item.name }}
                                     </th>
+
+                                    <!-- Type -->
+                                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ item.type_name }}
+                                    </td>
 
                                     <td class="px-6 py-4">
 
@@ -187,13 +215,15 @@
             </div>
         </div>
 
-        <!-- Post Modal -->
+        <!-- Office Modal -->
         <DialogModal :show="showModal">
             <template #title>
-                Post
+                Office
             </template>
             <template #content>
-                <TypeForm :form="formObject"></TypeForm>
+                <OfficeForm :form="formObject" 
+                    :officeTypes="officeTypes" 
+                    :isEdit="isEdit"></OfficeForm>
             </template>
             <template #footer>
                 <!-- Cancel Button -->

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Office;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\OfficeFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class OfficeSeeder extends Seeder
 {
@@ -13,11 +13,9 @@ class OfficeSeeder extends Seeder
      */
     public function run(): void
     {
-        for($i = 0; $i <= 10; $i++){
-            Office::create([
-                'name' => "Office {$i}",
-                'type_id' => 1
-            ]);
-        }
+        DB::table('offices')->truncate();
+        
+        $fact = new OfficeFactory();
+        $fact->count(15)->create();
     }
 }

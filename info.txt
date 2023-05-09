@@ -36,6 +36,10 @@ laravel new laravel_inertia_vue_crud
 composer require laravel/jetstream
 php artisan jetstream:install inertia
 
+composer require --dev kitloong/laravel-migrations-generator
+php artisan migrate:generate
+php artisan migrate:fresh
+
 php artisan migrate
 
 php artisan make:model Book --all
@@ -58,8 +62,9 @@ php artisan make:observer HumanObserver --model=Human
 
 
 
-php artisan make:model Species --all
-php artisan make:observer SpeciesObserver --model=Species
 
 php artisan make:model Animal --all
 php artisan make:observer AnimalObserver --model=Animal
+
+php artisan make:model Patient --all
+php artisan make:observer PatientObserver --model=Patient

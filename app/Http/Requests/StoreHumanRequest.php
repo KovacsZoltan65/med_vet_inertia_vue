@@ -23,7 +23,7 @@ class StoreHumanRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'post_id' => 'required',
+            'type_id' => 'required',
         ];
     }
 }

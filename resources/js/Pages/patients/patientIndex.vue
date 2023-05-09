@@ -1,103 +1,87 @@
 <script>
-    import AppLayout from '../../Layouts/AppLayout.vue';
+import AppLayout from '../../Layouts/AppLayout.vue';
 
-    import Pagination from '../../Components/Pagination.vue';
-    import DialogModal from '../../Components/DialogModal.vue';
-    import CompanyForm from './form.vue';
+import Pagination from '../../Components/Pagination.vue';
+import DialogModal from '../../Components/DialogModal.vue';
+import PatientForm from './patientForm.vue';
 
-    import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
-    import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
-    import AddButton from '../../Components/buttons/AddButton.vue';
-    import EditButton from '../../Components/buttons/EditButton.vue';
-    import DeleteButton from '../../Components/buttons/DeleteButton.vue';
+import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
+import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
+import AddButton from '../../Components/buttons/AddButton.vue';
+import EditButton from '../../Components/buttons/EditButton.vue';
+import DeleteButton from '../../Components/buttons/DeleteButton.vue';
 
-    import ArrowRightOnRectangleIcon from '../../Components/icons/ArrowRightOnRectangleIcon.vue';
+import ArrowRightOnRectangleIcon from '../../Components/icons/ArrowRightOnRectangleIcon.vue';
+import {
+    PencilIcon, PlusIcon, TrashIcon, CircleStackIcon
+} from '@heroicons/vue/24/solid';
 
-    import {
-        PlusIcon, PencilIcon, TrashIcon, CircleStackIcon
-    } from '@heroicons/vue/24/solid';
+import Success from '../../Components/alerts/Success.vue';
 
-    import Success from '../../Components/alerts/Success.vue';
+const defaultTypeObject = {
+    id: 0, user_id: null, doctor_id: null, animal_id: null,
+    office_id: null, treatment_id: null, start_time: null, final_time: null
+};
+export default (await import('vue')).defineComponent({
+    name: 'Patients',
+    props: ['data', 'offices', 'doctors', 'animals', ''],
+    components: {
+    AppLayout,
+    Pagination,
+    Success,
+    EditButton,
+    DeleteButton,
+    AddButton,
+    PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
+    PatientForm,
+    SecondaryButton,
+    ArrowRightOnRectangleIcon,
+    PrimaryButton,
+    DialogModal
+},
+    data() {
+        return {
+            showModal: false,
+            isEdit: false,
+            formObject: defaultTypeObject,
 
-    const defaultTypeObject = {
-        name: null
-    };
+            selected: [],
+            selectAll: false,
+        }
+    },
+    methods: {
 
-    export default (await import('vue')).defineComponent({
-        name: 'Companies',
-        props: ['data'],
-        components: {
-            AppLayout,
-            Pagination,
-            DialogModal,
-            CompanyForm,
-            PrimaryButton, SecondaryButton, 
-            AddButton, EditButton, DeleteButton,
-            PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
-            Success, ArrowRightOnRectangleIcon
-        },
-        setup() {},
-        data() {
-            return {
-                showModal: false,
-                isEdit: false,
-                formObject: defaultTypeObject,
-
-                selected: [],
-                selectAll: false,
+        select() {
+            this.selected = [];
+            if (!this.selectAll) {
+                for (let i in this.data.data) {
+                    this.selected.push(this.data.data[i].id)
+                }
             }
         },
-        mounted() { },
-        created() { },
-        methods: {
-            
-            select(){
-                this.selected = [];
-                if( !this.selectAll ){
-                    for( let i in this.data.data ){
-                        this.selected.push(this.data.data[i].id)
-                    }
-                }
-            },
 
-            openForm(item) {
-                this.isEdit = !!item;
-                this.formObject = item ? Object.assign({}, item) : defaultTypeObject;
-                this.showModal = true;
+        openForm(item){
+            this.isEdit = !!item;
+            this.formObject = item ? Object.assign({}, item) : defaultTypeObject;
+            this.showModal = true;
 
-                this.$page.props.errors = {};
-            },
-            closeForm() {
-                this.showModal = false;
-                this.formObject = defaultTypeObject;
-            },
-            saveItem(item) {
-                let url = '/companies';
-                if (item.id) {
-                    url += `/${item.id}`;
-                    item._method = 'PUT';
-                }
-
-                this.$inertia.post(url, item, {
-                    onError: (err) => { console.log(err); },
-                    onSuccess: () => {
-                        this.closeForm();
-                    },
-                });
-
-            },
-            deleteItem() {
-                console.log('deleteItem', this.formObject);
-            },
-        }
-    });
+            this.$page.props.errors = {};
+        },
+        closeForm(){
+            this.showModal = false;
+            this.formObject = defaultTypeObject;
+        },
+        saveItem(item){},
+        deleteItem(){}
+    }
+});
 </script>
 
 <template>
-    <AppLayout title="Companies">
+    <AppLayout title="Patients">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Companies
+                Patients
             </h2>
         </template>
 
@@ -113,10 +97,10 @@
                         <PlusIcon class="h-5 w-5" />
                     </AddButton>
 
-                    <!-- Book list -->
+                    <!-- Office list -->
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        
-                        <div class="text-uppercase text-bold">id selected: {{selected}}</div>
+
+                        <div class="text-uppercase text-bold">id selected: {{ selected }}</div>
 
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -124,46 +108,50 @@
                                     <!-- SELECT ALL -->
                                     <th scope="col" class="p-4">
                                         <div class="flex items-center">
-                                            <input id="checkbox-all-search" 
-                                                type="checkbox"
-                                                v-model="selectAll" 
+                                            <input id="checkbox-all-search" type="checkbox" v-model="selectAll"
                                                 @click="select"
                                                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-all-search" 
-                                                class="sr-only">checkbox</label>
+                                            <label for="checkbox-all-search" class="sr-only">checkbox</label>
                                         </div>
                                     </th>
                                     <!-- NAME -->
-                                    <th scope="col" class="px-6 py-3">Name</th>
+                                    <th scope="col" class="px-6 py-3">user_id</th>
+                                    <!-- TYPE -->
+                                    <th scope="col" class="px-6 py-3">doctor</th>
                                     <!-- ACTION -->
                                     <th scope="col" class="px-6 py-3">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="item in data.data" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    
+                                <tr v-for="item in data.data"
+                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+
                                     <!-- Row checkbox -->
                                     <td class="w-4 p-4">
                                         <div class="flex items-center">
-                                            <input id="checkbox-table-search-1" 
-                                                type="checkbox"
-                                                :value="item.id"
+                                            <input id="checkbox-table-search-1" type="checkbox" :value="item.id"
                                                 v-model="selected"
                                                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                             <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                                         </div>
                                     </td>
-                                    
+
                                     <!-- Name -->
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ item.name }}
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ item.user_id }}
                                     </th>
+
+                                    <!-- Type -->
+                                    <td scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ item.doctor_name }}
+                                    </td>
 
                                     <td class="px-6 py-4">
 
                                         <!-- EDIT button -->
-                                        <EditButton type="button" 
-                                            @click="openForm(item)">
+                                        <EditButton type="button" @click="openForm(item)">
                                             <PencilIcon class="h-5 w-5" />
                                         </EditButton>
 
@@ -187,14 +175,19 @@
             </div>
         </div>
 
-        <!-- Post Modal -->
+        <!-- Patient Modal -->
         <DialogModal :show="showModal">
             <template #title>
-                Company
+                Patient
             </template>
+            
             <template #content>
-                <CompanyForm :form="formObject"></CompanyForm>
+                <PatientForm :form="formObject" 
+                    :types="types"
+                    :isEdit="isEdit"
+                />
             </template>
+
             <template #footer>
                 <!-- Cancel Button -->
                 <SecondaryButton type="button" @click="closeForm()" class="self-start">
@@ -212,6 +205,5 @@
                 </PrimaryButton>
             </template>
         </DialogModal>
-
     </AppLayout>
 </template>

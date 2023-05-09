@@ -3,7 +3,7 @@
 
     import Pagination from '../../Components/Pagination.vue';
     import DialogModal from '../../Components/DialogModal.vue';
-    import OfficeForm from './form.vue';
+    import HumanForm from './humanForm.vue';
 
     import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
     import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
@@ -20,17 +20,18 @@
     import Success from '../../Components/alerts/Success.vue';
 
     const defaultTypeObject = {
-        id: 0, name: null, type_id: 0
+        id: 0, name: null, type_id: 0, image: null
     };
 
     export default (await import('vue')).defineComponent({
-        name: 'Offices',
-        props: ['data'],
+        name: 'Humans',
+        props: ['data', 'humanTypes'],
+
         components: {
             AppLayout,
             Pagination,
             DialogModal,
-            OfficeForm,
+            HumanForm,
             PrimaryButton, SecondaryButton, 
             AddButton, EditButton, DeleteButton,
             PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
@@ -42,7 +43,8 @@
                 showModal: false,
                 isEdit: false,
                 formObject: defaultTypeObject,
-                officeTypes: [],
+
+                types: [],
 
                 selected: [],
                 selectAll: false,
@@ -50,11 +52,32 @@
         },
         mounted() { },
         created() { 
-            //console.log(this.data);
-            this.getTypes();
+            this.types = this.humanTypes;
+            //console.log(this.types);
         },
         methods: {
             
+            image_path(image){
+                return '/' + image;
+            },
+
+            saveItem(item) {
+                let url = '/humans';
+                if (item.id) {
+                    url += `/${item.id}`;
+                    item._method = 'PUT';
+                }
+                //console.log(item);
+                
+                this.$inertia.post(url, item, {
+                    onError: (err) => { console.log(err); },
+                    onSuccess: () => {
+                        this.closeForm();
+                    },
+                });
+                
+            },
+
             select(){
                 this.selected = [];
                 if( !this.selectAll ){
@@ -64,16 +87,10 @@
                 }
             },
 
-            getTypes(){
-
-                axios.get('/get_office_types')
-                    .then(res => {
-                        this.officeTypes = res.data;
-                    })
-                    .catch(err => { console.log(err); });
-            },
-
             openForm(item) {
+                //console.log(item);
+                //console.log(defaultTypeObject);
+
                 this.isEdit = !!item;
                 this.formObject = item ? Object.assign({}, item) : defaultTypeObject;
                 this.showModal = true;
@@ -86,22 +103,6 @@
                 this.formObject = defaultTypeObject;
             },
 
-            saveItem(item) {
-                let url = '/offices';
-                if (item.id) {
-                    url += `/${item.id}`;
-                    item._method = 'PUT';
-                }
-
-                this.$inertia.post(url, item, {
-                    onError: (err) => { console.log(err); },
-                    onSuccess: () => {
-                        this.closeForm();
-                    },
-                });
-
-            },
-            
             deleteItem() {
                 console.log('deleteItem', this.formObject);
             },
@@ -110,10 +111,10 @@
 </script>
 
 <template>
-    <AppLayout title="Offices">
+    <AppLayout title="Humans">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Offices
+                Humans
             </h2>
         </template>
 
@@ -129,7 +130,7 @@
                         <PlusIcon class="h-5 w-5" />
                     </AddButton>
 
-                    <!-- Office list -->
+                    <!-- Human list -->
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         
                         <div class="text-uppercase text-bold">id selected: {{selected}}</div>
@@ -153,6 +154,8 @@
                                     <th scope="col" class="px-6 py-3">Name</th>
                                     <!-- TYPE -->
                                     <th scope="col" class="px-6 py-3">Type</th>
+                                    <!-- IMAGE -->
+                                    <th scope="col" class="px-6 py-3">Image</th>
                                     <!-- ACTION -->
                                     <th scope="col" class="px-6 py-3">Action</th>
                                 </tr>
@@ -182,6 +185,12 @@
                                         {{ item.type_name }}
                                     </th>
 
+                                    <!-- Image -->
+                                    <td class="px-6 py-4">
+                                        <img v-if="item.image" :src="image_path(item.image)" 
+                                            width="100" height="auto"/>
+                                    </td>
+
                                     <td class="px-6 py-4">
 
                                         <!-- EDIT button -->
@@ -210,15 +219,15 @@
             </div>
         </div>
 
-        <!-- Office Modal -->
+        <!-- Human Modal -->
         <DialogModal :show="showModal">
             <template #title>
-                Office
+                Human
             </template>
             <template #content>
-                <OfficeForm :form="formObject" 
-                    :officeTypes="officeTypes" 
-                    :isEdit="isEdit"></OfficeForm>
+                <HumanForm :form="formObject" 
+                    :types="types" 
+                    :isEdit="isEdit"></HumanForm>
             </template>
             <template #footer>
                 <!-- Cancel Button -->

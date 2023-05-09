@@ -17,7 +17,8 @@ class OfficeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => 'Office ' . fake()->randomFloat(0, 1, 1000),
+            'type_id' => fake()->randomFloat(0, 1, 6),
         ];
     }
 }

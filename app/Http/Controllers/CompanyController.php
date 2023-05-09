@@ -18,7 +18,7 @@ class CompanyController extends Controller
     {
         $data = Company::query()->paginate(20);
         //dd($data);
-        return Inertia::render('companies/index', [
+        return Inertia::render('companies/companyIndex', [
             'data' => $data,
         ]);
     }

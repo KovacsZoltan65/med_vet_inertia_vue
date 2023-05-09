@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\HumanType;
 use App\Http\Requests\StoreHumanRequest;
 use App\Http\Requests\UpdateHumanRequest;
 use App\Models\Human;
-use App\Models\Post;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,15 +16,20 @@ class HumanController extends Controller {
      */
     public function index() {
         $data = Human::query()->paginate(10);
-        $posts = Post::all();
 
         foreach ($data as $human) {
-            $human->post_name = $human->post->name;
+            $human->type_name = HumanType::from($human->type_id)->getLabelText();
+            $human->type_color = HumanType::from($human->type_id)->getLabelColor();
+            $human->type_label = HumanType::from($human->type_id)->getLabelHTML();
         }
-
-        return Inertia::render('humans/index', [
-                'data' => $data,
-                'posts' => $posts,
+        
+        $human_types = HumanType::toArray();
+        
+        //dd($human_types);
+        
+        return Inertia::render('humans/humanIndex', [
+            'data' => $data,
+            'humanTypes' => $human_types,
         ]);
     }
 

@@ -11,7 +11,10 @@ class HumanSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
-    public function run(): void {
+    public function run(): void
+    {
+        \Illuminate\Support\Facades\DB::table('humans')->truncate();
+        
         for ($i = 0; $i <= 10; $i++) {
             Human::create([
                 'name' => "Human {$i}",

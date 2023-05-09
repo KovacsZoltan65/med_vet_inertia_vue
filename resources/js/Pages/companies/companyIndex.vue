@@ -3,7 +3,7 @@
 
     import Pagination from '../../Components/Pagination.vue';
     import DialogModal from '../../Components/DialogModal.vue';
-    import HumanForm from './form.vue';
+    import CompanyForm from './companyForm.vue';
 
     import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
     import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
@@ -20,17 +20,17 @@
     import Success from '../../Components/alerts/Success.vue';
 
     const defaultTypeObject = {
-        id: 0, name: null, post_id: 0, image: null
+        name: null
     };
 
     export default (await import('vue')).defineComponent({
-        name: 'Humans',
+        name: 'Companies',
         props: ['data'],
         components: {
             AppLayout,
             Pagination,
             DialogModal,
-            HumanForm,
+            CompanyForm,
             PrimaryButton, SecondaryButton, 
             AddButton, EditButton, DeleteButton,
             PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
@@ -42,40 +42,15 @@
                 showModal: false,
                 isEdit: false,
                 formObject: defaultTypeObject,
-                posts: [],
 
                 selected: [],
                 selectAll: false,
             }
         },
         mounted() { },
-        created() { 
-            //console.log(this.data);
-            this.getPosts();
-        },
+        created() { },
         methods: {
             
-            image_path(image){
-                return '/' + image;
-            },
-
-            saveItem(item) {
-                let url = '/humans';
-                if (item.id) {
-                    url += `/${item.id}`;
-                    item._method = 'PUT';
-                }
-                //console.log(item);
-                
-                this.$inertia.post(url, item, {
-                    onError: (err) => { console.log(err); },
-                    onSuccess: () => {
-                        this.closeForm();
-                    },
-                });
-                
-            },
-
             select(){
                 this.selected = [];
                 if( !this.selectAll ){
@@ -85,32 +60,32 @@
                 }
             },
 
-            getPosts(){
-
-                axios.get('/get_posts')
-                    .then(res => {
-                        //console.log(res.data);
-                        this.posts = res.data;
-                    })
-                    .catch(err => { console.log(err); });
-            },
-
             openForm(item) {
-                //console.log(item);
-                //console.log(defaultTypeObject);
-
                 this.isEdit = !!item;
                 this.formObject = item ? Object.assign({}, item) : defaultTypeObject;
                 this.showModal = true;
 
                 this.$page.props.errors = {};
             },
-
             closeForm() {
                 this.showModal = false;
                 this.formObject = defaultTypeObject;
             },
+            saveItem(item) {
+                let url = '/companies';
+                if (item.id) {
+                    url += `/${item.id}`;
+                    item._method = 'PUT';
+                }
 
+                this.$inertia.post(url, item, {
+                    onError: (err) => { console.log(err); },
+                    onSuccess: () => {
+                        this.closeForm();
+                    },
+                });
+
+            },
             deleteItem() {
                 console.log('deleteItem', this.formObject);
             },
@@ -119,10 +94,10 @@
 </script>
 
 <template>
-    <AppLayout title="Humans">
+    <AppLayout title="Companies">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Humans
+                Companies
             </h2>
         </template>
 
@@ -138,7 +113,7 @@
                         <PlusIcon class="h-5 w-5" />
                     </AddButton>
 
-                    <!-- Human list -->
+                    <!-- Book list -->
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                         
                         <div class="text-uppercase text-bold">id selected: {{selected}}</div>
@@ -160,10 +135,6 @@
                                     </th>
                                     <!-- NAME -->
                                     <th scope="col" class="px-6 py-3">Name</th>
-                                    <!-- TYPE -->
-                                    <th scope="col" class="px-6 py-3">Type</th>
-                                    <!-- IMAGE -->
-                                    <th scope="col" class="px-6 py-3">Image</th>
                                     <!-- ACTION -->
                                     <th scope="col" class="px-6 py-3">Action</th>
                                 </tr>
@@ -187,17 +158,6 @@
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ item.name }}
                                     </th>
-
-                                    <!-- Type -->
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ item.post_name }}
-                                    </th>
-
-                                    <!-- Image -->
-                                    <td class="px-6 py-4">
-                                        <img v-if="item.image" :src="image_path(item.image)" 
-                                            width="100" height="auto"/>
-                                    </td>
 
                                     <td class="px-6 py-4">
 
@@ -227,15 +187,13 @@
             </div>
         </div>
 
-        <!-- Human Modal -->
+        <!-- Post Modal -->
         <DialogModal :show="showModal">
             <template #title>
-                Human
+                Company
             </template>
             <template #content>
-                <HumanForm :form="formObject" 
-                    :posts="posts" 
-                    :isEdit="isEdit"></HumanForm>
+                <CompanyForm :form="formObject"></CompanyForm>
             </template>
             <template #footer>
                 <!-- Cancel Button -->

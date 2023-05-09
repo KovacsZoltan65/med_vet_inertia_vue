@@ -5,10 +5,8 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HumanController;
 use App\Http\Controllers\OfficeController;
-use App\Http\Controllers\OfficeTypeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\SpeciesController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -49,21 +47,9 @@ Route::middleware([
         'index' => 'companies'
     ]);
 
-    // OFFICE TYPES
-    Route::get('/get_office_types', [OfficeTypeController::class, 'getOfficeTypes'])->name('get_office_types');
-    Route::resource('/office_types', OfficeTypeController::class)->names([
-        'index' => 'office_types',
-    ]);
-
     // OFFICES
     Route::resource('/offices', OfficeController::class)->names([
         'index' => 'offices',
-    ]);
-
-    // POSTS
-    Route::get('/get_posts', [PostController::class, 'getPosts'])->name('get_posts');
-    Route::resource('/posts', PostController::class)->names([
-        'index' => 'posts',
     ]);
 
     // -------------
@@ -86,10 +72,10 @@ Route::middleware([
     ]);
     
     // -------------
-    // SPECIES
+    // Betegek
     // -------------
-    Route::resource('species', SpeciesController::class)->names([
-        'index' => 'species',
+    Route::resource('/patients', \App\Http\Controllers\PatientController::class)->names([
+        'index' => 'patients'
     ]);
 
     // BOOKS

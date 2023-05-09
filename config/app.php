@@ -187,4 +187,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'page_lines' => 10,
+    
 ];

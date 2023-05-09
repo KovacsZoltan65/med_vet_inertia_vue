@@ -10,10 +10,10 @@
     </svg>
 </template>
 <script setup>
-defineProps({
-    class: {
-        type: String,
-        default: 'w-6 h-6'
-    }
-});
+    defineProps({
+        class: {
+            type: String,
+            default: 'w-6 h-6'
+        }
+    });
 </script>

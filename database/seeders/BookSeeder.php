@@ -12,7 +12,9 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
+        \Illuminate\Support\Facades\DB::table('books')->truncate();
+        
         $fact = new BookFactory();
-        $fact->count(1000)->create();
+        $fact->count(100)->create();
     }
 }
