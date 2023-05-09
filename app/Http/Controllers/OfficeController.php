@@ -15,7 +15,7 @@ class OfficeController extends Controller
      */
     public function index()
     {
-        $data = Office::query()->paginate(10);
+        $data = Office::query()->paginate(config('app.page_lines'));
         
         //$types = OfficeType::all();
 

@@ -15,7 +15,7 @@ class HumanController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $data = Human::query()->paginate(10);
+        $data = Human::query()->paginate(config('app.page_lines'));
 
         foreach ($data as $human) {
             $human->type_name = HumanType::from($human->type_id)->getLabelText();
@@ -24,8 +24,6 @@ class HumanController extends Controller {
         }
         
         $human_types = HumanType::toArray();
-        
-        //dd($human_types);
         
         return Inertia::render('humans/humanIndex', [
             'data' => $data,
