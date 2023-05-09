@@ -192,9 +192,11 @@
             <template #title>
                 Company
             </template>
+
             <template #content>
                 <CompanyForm :form="formObject"></CompanyForm>
             </template>
+            
             <template #footer>
                 <!-- Cancel Button -->
                 <SecondaryButton type="button" @click="closeForm()" class="self-start">
@@ -211,6 +213,7 @@
                     <CircleStackIcon class="h-5 w-5" />
                 </PrimaryButton>
             </template>
+            
         </DialogModal>
 
     </AppLayout>

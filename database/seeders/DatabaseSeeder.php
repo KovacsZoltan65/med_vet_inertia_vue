@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             BookSeeder::class,
             CompanySeeder::class,
             OfficeSeeder::class,
-            
+            HumanSeeder::class,
             AnimalSeeder::class,
             PatientSeeder::class,
         ]);

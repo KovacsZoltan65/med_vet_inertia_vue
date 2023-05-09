@@ -53,7 +53,6 @@
         mounted() { },
         created() { 
             this.types = this.humanTypes;
-            //console.log(this.types);
         },
         methods: {
             

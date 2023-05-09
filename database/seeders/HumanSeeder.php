@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Human;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\HumanFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class HumanSeeder extends Seeder {
 
@@ -13,14 +13,10 @@ class HumanSeeder extends Seeder {
      */
     public function run(): void
     {
-        \Illuminate\Support\Facades\DB::table('humans')->truncate();
+        DB::table('humans')->truncate();
         
-        for ($i = 0; $i <= 10; $i++) {
-            Human::create([
-                'name' => "Human {$i}",
-                'type_id' => 1,
-            ]);
-        }
+        $fact = new HumanFactory();
+        $fact->count(25)->create();
     }
 
 }

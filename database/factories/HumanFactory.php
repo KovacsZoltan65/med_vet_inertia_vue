@@ -17,7 +17,8 @@ class HumanFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => 'Human ' . fake()->randomFloat(0, 1, 1000),
+            'type_id' => fake()->randomFloat(0, 1, 6),
         ];
     }
 }
