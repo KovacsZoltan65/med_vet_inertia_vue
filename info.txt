@@ -45,7 +45,21 @@ php artisan make:model Company --all
 php artisan make:model OfficeType --all
 php artisan make:model Office --all
 
+php artisan make:model HumanType --all
+php artisan make:model Human --all
+
 npm install filepond vue-filepond filepond-plugin-file-poster filepond-plugin-file-validate-type filepond-plugin-image-preview
 php artisan make:observer BookObserver --model=Book
 
 npm install @heroicons/vue
+
+php artisan make:observer HumanObserver --model=Human
+
+
+
+
+php artisan make:model Species --all
+php artisan make:observer SpeciesObserver --model=Species
+
+php artisan make:model Animal --all
+php artisan make:observer AnimalObserver --model=Animal
