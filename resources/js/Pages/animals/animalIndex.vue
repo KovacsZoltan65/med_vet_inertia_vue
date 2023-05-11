@@ -106,10 +106,10 @@
 </script>
 
 <template>
-    <AppLayout title="Offices">
+    <AppLayout title="Animals">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Offices
+                Animals
             </h2>
         </template>
 
@@ -220,7 +220,7 @@
         <!-- Office Modal -->
         <DialogModal :show="showModal">
             <template #title>
-                Office
+                Animal
             </template>
             <template #content>
                 <AnimalForm :form="formObject" 

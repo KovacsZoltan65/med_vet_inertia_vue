@@ -19,7 +19,7 @@ class AnimalController extends Controller
         $data = Animal::query()->paginate( config('app.page_lines') );
         
         foreach($data as $animal){
-
+            
             $animal->sex_name = AnimalSex::from($animal->sex)->getLabelText();
             $animal->sex_color = AnimalSex::from($animal->sex)->getLabelColor();
             $animal->sex_label = AnimalSex::from($animal->sex)->getLabelHTML();

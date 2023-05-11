@@ -93,14 +93,14 @@
                         </NavLink>
                     </li>
 
-                    <!-- POSTS -->
-                    <!--<li>
-                        <NavLink :href="route('posts')" 
-                            :active="route().current('posts')">
+                    <!-- ADDRESSES -->
+                    <li>
+                        <NavLink :href="route('addresses')" 
+                            :active="route().current('addresses')">
                             <AcademicCapIcon class="w-4 h-4 mr-2" />
-                            <span>Posts</span>
+                            <span>Addresses</span>
                         </NavLink>
-                    </li>-->
+                    </li>
 
                     <!-- HUMANS -->
                     <li>
