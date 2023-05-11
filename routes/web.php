@@ -6,7 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HumanController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\PostController;
+//use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -72,12 +72,19 @@ Route::middleware([
     ]);
     
     // -------------
-    // Betegek
+    // PATIENTS
     // -------------
     Route::resource('/patients', \App\Http\Controllers\PatientController::class)->names([
         'index' => 'patients'
     ]);
 
+    // -------------
+    // ADDRESSES
+    // -------------
+    Route::resource('/addresses', \App\Http\Controllers\AddressController::class)->names([
+        'index' => 'addresses'
+    ]);
+    
     // BOOKS
     Route::resource('books', BookController::class)
         ->names([
