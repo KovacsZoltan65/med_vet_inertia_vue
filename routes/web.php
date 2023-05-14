@@ -1,12 +1,16 @@
 <?php
+//use App\Http\Controllers\PostController;
 
+
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ExaminationController;
 use App\Http\Controllers\HumanController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
-//use App\Http\Controllers\PostController;
+use App\Http\Controllers\PatientController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -74,16 +78,29 @@ Route::middleware([
     // -------------
     // PATIENTS
     // -------------
-    Route::resource('/patients', \App\Http\Controllers\PatientController::class)->names([
+    Route::get('/getPatients', [PatientController::class, 'getPatients'])
+        ->name('getPatients');
+    Route::resource('/patients', PatientController::class)->names([
         'index' => 'patients'
     ]);
 
     // -------------
     // ADDRESSES
     // -------------
-    Route::resource('/addresses', \App\Http\Controllers\AddressController::class)->names([
+    Route::resource('/addresses', AddressController::class)->names([
         'index' => 'addresses'
     ]);
+    
+    // -------------
+    // EXAMINATIONS
+    // -------------
+    Route::get('/getExaminations', [ExaminationController::class, 'getExaminations'])->name('getExaminations');
+    //Route::get('/getExaminations', function(){ print_r('asdasd'); })->name('getExaminations');
+    
+    Route::resource('/examinations', ExaminationController::class)
+        ->names([
+            'index' => 'examinations'
+        ]);
     
     // BOOKS
     Route::resource('books', BookController::class)
