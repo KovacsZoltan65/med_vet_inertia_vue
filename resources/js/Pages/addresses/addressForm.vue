@@ -12,7 +12,7 @@
             InputLabel
         },
         mounted(){
-            console.log('mounted');
+            //console.log('mounted');
         },
         created(){
             //console.log(this.form);
@@ -22,7 +22,7 @@
             //});
             //console.log(this.humans);
             //console.log(this.addressTypes);
-            console.log('created');
+            //console.log('created');
         },
     });
 </script>

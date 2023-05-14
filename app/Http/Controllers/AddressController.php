@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Addresses;
+use App\Enums\AddressType;
 use App\Http\Requests\StoreAddressesRequest;
 use App\Http\Requests\UpdateAddressesRequest;
+use App\Models\Addresses;
+use App\Models\Company;
+use App\Models\Human;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AddressController extends Controller
@@ -12,8 +16,13 @@ class AddressController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if( $request->has('param') ){
+            $query = $request->query('param');
+            //dd($query);
+        }
+        
         $data = Addresses::query()
             ->paginate(config('app.page_lines'));
         
@@ -36,11 +45,11 @@ class AddressController extends Controller
         
         //dd($data);
         
-        $companies = \App\Models\Company::toSelect();
+        $companies = Company::toSelect();
         
-        $humans = \App\Models\Human::toSelect();
+        $humans = Human::toSelect();
         
-        $addressTypes = \App\Enums\AddressType::toArray();
+        $addressTypes = AddressType::toArray();
 
         //dd($companies, $humans, $addressTypes);
         
