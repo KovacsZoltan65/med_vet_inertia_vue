@@ -1,80 +1,92 @@
 <script>
-import AppLayout from '../../Layouts/AppLayout.vue';
+    import AppLayout from '../../Layouts/AppLayout.vue';
 
-import Pagination from '../../Components/Pagination.vue';
-import DialogModal from '../../Components/DialogModal.vue';
-import PatientForm from './patientForm.vue';
+    import Pagination from '../../Components/Pagination.vue';
+    import DialogModal from '../../Components/DialogModal.vue';
+    import PatientForm from './patientForm.vue';
 
-import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
-import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
-import AddButton from '../../Components/buttons/AddButton.vue';
-import EditButton from '../../Components/buttons/EditButton.vue';
-import DeleteButton from '../../Components/buttons/DeleteButton.vue';
+    import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
+    import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
+    import AddButton from '../../Components/buttons/AddButton.vue';
+    import EditButton from '../../Components/buttons/EditButton.vue';
+    import DeleteButton from '../../Components/buttons/DeleteButton.vue';
 
-import ArrowRightOnRectangleIcon from '../../Components/icons/ArrowRightOnRectangleIcon.vue';
-import {
-    PencilIcon, PlusIcon, TrashIcon, CircleStackIcon
-} from '@heroicons/vue/24/solid';
+    import ArrowRightOnRectangleIcon from '../../Components/icons/ArrowRightOnRectangleIcon.vue';
+    import {
+        PencilIcon, PlusIcon, TrashIcon, CircleStackIcon
+    } from '@heroicons/vue/24/solid';
 
-import Success from '../../Components/alerts/Success.vue';
+    import Success from '../../Components/alerts/Success.vue';
 
-const defaultTypeObject = {
-    id: 0, user_id: null, doctor_id: null, animal_id: null,
-    office_id: null, treatment_id: null, start_time: null, final_time: null
-};
-export default (await import('vue')).defineComponent({
-    name: 'Patients',
-    props: ['data', 'offices', 'doctors', 'animals', ''],
-    components: {
-    AppLayout,
-    Pagination,
-    Success,
-    EditButton,
-    DeleteButton,
-    AddButton,
-    PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
-    PatientForm,
-    SecondaryButton,
-    ArrowRightOnRectangleIcon,
-    PrimaryButton,
-    DialogModal
-},
-    data() {
-        return {
-            showModal: false,
-            isEdit: false,
-            formObject: defaultTypeObject,
+    import { 
+        initFlowbite, 
+        initDropdowns, 
+        //Dropdown 
+    } from 'flowbite';
 
-            selected: [],
-            selectAll: false,
-        }
-    },
-    methods: {
+    const defaultTypeObject = {
+        id: 0, user_id: null, doctor_id: null, animal_id: null,
+        office_id: null, treatment_id: null, start_time: null, final_time: null
+    };
 
-        select() {
-            this.selected = [];
-            if (!this.selectAll) {
-                for (let i in this.data.data) {
-                    this.selected.push(this.data.data[i].id)
-                }
+    export default (await import('vue')).defineComponent({
+        name: 'Patients',
+        props: ['data', 'offices', 'doctors', 'animals', ''],
+        components: {
+            AppLayout,
+            Pagination,
+            Success,
+            EditButton,
+            DeleteButton,
+            AddButton,
+            PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
+            PatientForm,
+            SecondaryButton,
+            ArrowRightOnRectangleIcon,
+            PrimaryButton,
+            DialogModal
+        },
+        data() {
+            return {
+                showModal: false,
+                isEdit: false,
+                formObject: defaultTypeObject,
+
+                selected: [],
+                selectAll: false,
             }
         },
-
-        openForm(item){
-            this.isEdit = !!item;
-            this.formObject = item ? Object.assign({}, item) : defaultTypeObject;
-            this.showModal = true;
-
-            this.$page.props.errors = {};
+        created() {},
+        mounted() {
+            initFlowbite();
+            initDropdowns();
         },
-        closeForm(){
-            this.showModal = false;
-            this.formObject = defaultTypeObject;
-        },
-        saveItem(item){},
-        deleteItem(){}
-    }
-});
+        methods: {
+
+            select() {
+                this.selected = [];
+                if (!this.selectAll) {
+                    for (let i in this.data.data) {
+                        this.selected.push(this.data.data[i].id)
+                    }
+                }
+            },
+
+            openForm(item){
+                this.isEdit = !!item;
+                this.formObject = item ? Object.assign({}, item) : defaultTypeObject;
+                this.showModal = true;
+
+                this.$page.props.errors = {};
+            },
+            closeForm(){
+                this.showModal = false;
+                this.formObject = defaultTypeObject;
+            },
+            saveItem(item){},
+            deleteItem(){}
+        }
+    });
 </script>
 
 <template>
@@ -183,7 +195,9 @@ export default (await import('vue')).defineComponent({
             
             <template #content>
                 <PatientForm :form="formObject" 
-                    :types="types"
+                    :doctors="doctors" 
+                    :offices="offices" 
+                    :animals="animals"
                     :isEdit="isEdit"
                 />
             </template>

@@ -12,7 +12,8 @@ export default(await import('vue')).defineComponent({
         InputError
     },
     created(){
-        console.log(this.$page.props);
+        //console.log(this.$page.props);
+        console.log(this.form);
     },
 });
 </script>
@@ -27,10 +28,10 @@ export default(await import('vue')).defineComponent({
                 
                 <select id="group" v-model="form.doctor_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option v-if="!isEdit" value="0" :selected="true">Choose ...</option>
-                    <option v-for="doctor in $page.props.doctors" 
+                    <option v-for="doctor in doctors" 
                         :key="doctor.id"
                         :value="doctor.id"
-                        :selectedValue="doctor.id == form.doctor_id"
+                        :selectedValue="form.doctor_id"
                     >{{ doctor.name }}</option>
                 </select>
                 <InputError :message="$page.props.errors.doctor_id" />
