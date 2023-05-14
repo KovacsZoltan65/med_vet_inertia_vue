@@ -24,6 +24,7 @@
         "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",
         "flowbite": "^1.6.5",
+        "lodash": "^4.17.21",
         "vue-filepond": "^7.0.3"
     }
 }
