@@ -126,6 +126,15 @@
                         </NavLink>
                     </li>
                     
+                    <!-- EXAMINATIONS -->
+                    <li>
+                        <NavLink :href="route('examinations')" 
+                            :active="route().current('examinations')">
+                            <BugAntIcon class="w-4 h-4 mr-2"/>
+                            Kezelések
+                        </NavLink>
+                    </li>
+
                 </ul>
             </div>
             
