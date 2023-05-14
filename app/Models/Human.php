@@ -14,8 +14,10 @@ class Human extends Model
     
     public static function doctors(){
         
-        // FodMap::where('name','=',$name)->where('category','=',$category)->get()
-        $data = Human::where('type_id', '=', HumanType::ORVOS)->get();
+        //$data = Human::where('type_id', '=', HumanType::ORVOS)->get();
+        $data = \DB::table('view_humans')
+            ->where('type_id', '=', HumanType::ORVOS)
+            ->get();
         
         return $data;
     }
