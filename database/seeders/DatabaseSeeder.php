@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
             //HumanSeeder::class,
             //AnimalSeeder::class,
             //PatientSeeder::class,
-            
-            AddressesSeeder::class,
+            //AddressesSeeder::class,
+            ExaminationSeeder::class,
         ]);
     }
 }
