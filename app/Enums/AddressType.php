@@ -43,7 +43,7 @@ enum AddressType: int
     
     public function getLabelColor() : string{
         return match($this){
-            self::PST => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300',
+            self::POST => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300',
             self::CENTER => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
             self::STORE => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
         };
