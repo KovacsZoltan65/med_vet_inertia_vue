@@ -26,11 +26,7 @@ class AddressController extends Controller
         $data = Addresses::query()
             ->paginate(config('app.page_lines'));
         
-        //echo '<pre>';
         foreach($data as $address){
-            
-            //print_r($address->company_id . PHP_EOL);
-            //print_r($address->human_id);
             
             if($address->company_id != 0){
                 //dd($address->company);
@@ -40,8 +36,11 @@ class AddressController extends Controller
                 $address->company_name = '';
                 $address->human_name = $address->human->name;
             }
+            
+            $address->type_name = AddressType::from($address->type_id)->getLabelText();
+            $address->type_color = AddressType::from($address->type_id)->getLabelColor();
+            $address->type_label = AddressType::from($address->type_id)->getLabelHTML();
         }
-        //echo '</pre>';
         
         //dd($data);
         
