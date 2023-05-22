@@ -59,4 +59,18 @@ class CompanyController extends Controller
 
         return redirect()->back()->with('message', 'Company deleted');
     }
+    
+    public function get_companies()
+    {
+        $companies = [];
+        
+        $tmp = Company::query()->orderBy('name', 'asc')->get();
+        
+        foreach($tmp as $company)
+        {
+            array_push($companies, (object)['value' => $company->id, 'label' => $company->name]);
+        }
+        
+        return $companies;
+    }
 }
