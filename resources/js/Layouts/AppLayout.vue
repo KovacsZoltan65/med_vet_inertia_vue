@@ -9,12 +9,12 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
-import CompaniesIcon from '../Components/icons/CompaniesIcon.vue';
-import OfficeIcon from '../Components/icons/OfficeIcon.vue';
-import { AcademicCapIcon, UsersIcon, EyeDropperIcon } from '@heroicons/vue/24/solid';
+//import CompaniesIcon from '../Components/icons/CompaniesIcon.vue';
+//import OfficeIcon from '../Components/icons/OfficeIcon.vue';
+//import { AcademicCapIcon, UsersIcon, EyeDropperIcon } from '@heroicons/vue/24/solid';
 
 import AdminMenu from '../MyComponents/menu/admin.vue';
-import ReceptionMenu from '@/MyComponents/menu/reception.vue';
+import ReceptionMenu from '../MyComponents/menu/reception.vue';
 
 defineProps({
     title: String,
