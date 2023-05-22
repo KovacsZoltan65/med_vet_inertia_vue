@@ -25,8 +25,7 @@
 
     export default (await import('vue')).defineComponent({
         name: 'Offices',
-        props: ['data', 'types'],
-
+        props: ['data'],
         components: {
             AppLayout,
             Pagination,
@@ -43,20 +42,13 @@
                 showModal: false,
                 isEdit: false,
                 formObject: defaultTypeObject,
-                officeTypes: [],
 
                 selected: [],
                 selectAll: false,
             }
         },
         mounted() { },
-        created() { 
-            //console.log(this.data.data[0]);
-            //console.log(this.types[0]);
-
-            this.officeTypes = this.types;
-            //this.getTypes();
-        },
+        created() { },
         methods: {
             
             select(){
@@ -67,16 +59,6 @@
                     }
                 }
             },
-            /*
-            getTypes(){
-
-                axios.get('/get_office_types')
-                    .then(res => {
-                        this.officeTypes = res.data;
-                    })
-                    .catch(err => { console.log(err); });
-            },
-            */
 
             openForm(item) {
                 this.isEdit = !!item;
@@ -221,9 +203,7 @@
                 Office
             </template>
             <template #content>
-                <OfficeForm :form="formObject" 
-                    :officeTypes="officeTypes" 
-                    :isEdit="isEdit"></OfficeForm>
+                <OfficeForm :form="formObject" :isEdit="isEdit"></OfficeForm>
             </template>
             <template #footer>
                 <!-- Cancel Button -->
