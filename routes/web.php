@@ -6,6 +6,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\EnumController;
 use App\Http\Controllers\ExaminationController;
 use App\Http\Controllers\HumanController;
 use App\Http\Controllers\OfficeController;
@@ -46,16 +47,30 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    // -------------
     // COMPANIES
+    // -------------
+    Route::get('/get_companies', [CompanyController::class, 'get_companies'])
+        ->name('get_companies');
     Route::resource('companies', CompanyController::class)->names([
         'index' => 'companies'
     ]);
 
+    // -------------
     // OFFICES
+    // -------------
+    Route::get('/get_offices', [OfficeController::class, 'get_offices'])
+        ->name('get_offices');
     Route::resource('/offices', OfficeController::class)->names([
         'index' => 'offices',
     ]);
 
+    // -------------
+    // OFFICE TYPES
+    // -------------
+    Route::get('/get_office_types', [EnumController::class, 'getOfficeTypesEnum'])
+        ->name('get_office_types');
+    
     // -------------
     // HUMANS
     // -------------
