@@ -15,27 +15,34 @@ class OfficeController extends Controller
      */
     public function index()
     {
-        $data = Office::query()->paginate(config('app.page_lines'));
-        
-        //$types = OfficeType::all();
+        $offices = Office::query()->paginate(config('app.page_lines'));
 
-        foreach($data as $office){
+        foreach($offices as $office){
             $office->type_name = OfficeType::from($office->type_id)->getLabelText();
             $office->type_color = OfficeType::from($office->type_id)->getLabelColor();
             $office->type_label = OfficeType::from($office->type_id)->getLabelHTML();
         }
         
-        $types = OfficeType::toArray();
+        $officeTypes = OfficeType::toArray();
         
-        //foreach($data as $office){
-        //    $office->type_name = $office->type->name;
-        //}
+        //dd($offices, $officeTypes);
         
-        return Inertia::render('offices/officeIndex', [
+        //echo '<pre>';
+        foreach($offices as $office)
+        {
+            //print_r($office->type()['name']);
+            $office->type_name = $office->type()['label'];
+        }
+        //echo '</pre>';
+        
+        //dd($office, $types);
+        $params = [
             'filters' => 'filters',
-            'data' => $data, 
-            'types' => $types
-        ]);
+            'data' => $offices, 
+            'types' => $officeTypes
+        ];
+        
+        return Inertia::render('offices/officeIndex', $params);
     }
 
     /**
@@ -73,5 +80,18 @@ class OfficeController extends Controller
         $office->delete();
 
         return redirect()->back()->with('message', 'Office deleted');
+    }
+    
+    public function get_offices()
+    {
+        $offices = Office::query()->paginate(config('app.page_lines'));
+        
+        foreach($offices as $office){
+            $office->type_name = OfficeType::from($office->type_id)->getLabelText();
+            $office->type_color = OfficeType::from($office->type_id)->getLabelColor();
+            $office->type_label = OfficeType::from($office->type_id)->getLabelHTML();
+        }
+        
+        return $offices;
     }
 }
