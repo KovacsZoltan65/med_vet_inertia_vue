@@ -36,8 +36,62 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return array_merge(parent::share($request), [
-            //
+        $merged_array = array_merge(parent::share($request), [
+            
+            'policies' => function() use($request)
+                {
+                    $user = $request->user();
+                    if( $user )
+                    {
+                        //$roles = [];
+                        $permissions = [];
+
+                        foreach($user->roles as $role)
+                        {
+                            //array_push($roles, [$role->title => true]);
+                            //$roles[$role->title] = true;
+                            
+                            $_permissions = $role->permissions;
+                            
+                            foreach($_permissions as $permission)
+                            {
+                                /*
+                                array_push(
+                                    $permissions, 
+                                    [$permission->title => $user->can($permission->title, \App\Models\User::class)]
+                                );
+                                */
+                                $permissions[$permission->title] = $user->can($permission->title, \App\Models\User::class);
+                            }
+                        }
+
+                        //return [
+                        //    'roles' => $roles,
+                        //    'permissions' => $permissions
+                        //];
+                        return $permissions;
+                    }
+                },
+            
         ]);
+        
+        return $merged_array;
+        /*
+        return array_merge(parent::share($request), [
+            'permissions' => [
+                'users' => function() use($request)
+                {
+                    $user = $request->user();
+                    if($user)
+                    {
+                        return [
+                            'viewAny' => $user->can('viewAny', \App\Models\User::class),
+                            'create' => $user->can('create', \App\Models\User::class),
+                        ];
+                    }
+                },
+            ],
+        ]);
+        */
     }
 }
