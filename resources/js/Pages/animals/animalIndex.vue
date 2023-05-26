@@ -50,7 +50,7 @@
                 selectAll: false,
             }
         },
-        mounted() { },
+        mounted() {},
         created() { 
             this.sex = this.animalSex;
             this.group = this.animalGroup;
