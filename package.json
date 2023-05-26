@@ -18,6 +18,7 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "@hennge/vue3-pagination": "^1.0.17",
         "@heroicons/vue": "^2.0.17",
         "filepond": "^4.30.4",
         "filepond-plugin-file-poster": "^2.5.1",
