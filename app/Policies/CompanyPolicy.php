@@ -12,8 +12,29 @@ class CompanyPolicy
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
-    {
-        //
+    {       
+        $roles = $permissions = [];
+        $permission = 'company_view';
+        
+        $_roles = $user->roles;
+        
+        foreach( $_roles as $_role )
+        {
+            $roles[] = $_role->title;
+            
+            $permissions = array_merge($permissions, \App\get_permissions($_role));
+            
+            //$_permissions = $_role->permissions;
+            
+            //foreach( $_permissions as $_permission )
+            //{
+            //    $permissions[] = $_permission->title;
+            //}
+        }
+        
+        $ret_value = ( in_array($permission, $roles) || in_array($permission, $permissions) );
+        
+        return $ret_value;
     }
 
     /**

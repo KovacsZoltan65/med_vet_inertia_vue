@@ -20,7 +20,7 @@ import {
 import Success from '../../Components/alerts/Success.vue';
 
 const defaultTypeObject = {
-    name: null, citx: null, address: null
+    name: null, city: null, address: null
 };
 
 export default (await import('vue')).defineComponent({
@@ -151,8 +151,7 @@ export default (await import('vue')).defineComponent({
                                     </td>
 
                                     <!-- Name -->
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ item.name }}
                                     </th>
 
@@ -183,7 +182,7 @@ export default (await import('vue')).defineComponent({
             </div>
         </div>
 
-        <!-- Post Modal -->
+        <!-- Company Modal -->
         <DialogModal :show="showModal">
             <template #title>
                 Company

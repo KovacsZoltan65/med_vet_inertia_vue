@@ -8,16 +8,25 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class CompanyController extends Controller
 {
+    public function __construct()
+    {
+        //$this->authorizeResource(\App\Models\User::class);
+        $this->authorizeResource(\App\Models\Company::class);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        //abort_if(Gate::denies('company_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
         $data = Company::query()->paginate(config('app.page_lines'));
-        //dd($data);
+        
         return Inertia::render('companies/companyIndex', [
             'data' => $data,
         ]);
