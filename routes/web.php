@@ -1,4 +1,5 @@
 <?php
+
 //use App\Http\Controllers\PostController;
 
 
@@ -12,20 +13,22 @@ use App\Http\Controllers\HumanController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\RoleController;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+ */
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -47,6 +50,45 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
+    // -------------
+    // ROLES
+    // -------------
+    Route::post('/roles/grid-data', [RoleController::class, 'getRoles'])->name('roles/grid-data');
+    Route::resource('/roles', RoleController::class)
+        ->names([
+            'index' => 'roles',
+    ]);
+
+    // -------------
+    // CLIENTS
+    // -------------
+    // clients ondec oldal
+    //Route::get('/clients/grid', 'ClientController@grid')->name('clients_grid');
+    Route::get('', [\App\Http\Controllers\ClientController::class, 'grid'])->name('clients_grid');
+
+    // grid adatok lekérése
+    //Route::post('/clients/grid-data', 'ClientController@gridData')->name('clients_grid_data');
+    Route::post('/clients/grid-data', [\App\Http\Controllers\ClientController::class, 'gridData'])->name('clients_grid_data');
+
+    // client adatok frissítésa
+    //Route::put('/clients/{client}', 'ClientController@update')->name('clients_update');
+    Route::put('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'update'])->name('clients_update');
+
+    // client létrehozása
+    //Route::post('/clients', 'ClientController@store')->name('clients_store');
+    Route::post('/clients', [\App\Http\Controllers\ClientController::class, 'store'])->name('clients_store');
+
+    // client törlése
+    //Route::delete('clients/{client}', 'ClientController@delete')->name('clients_delete');
+    Route::delete('clients/{client}', [\App\Http\Controllers\ClientController::class, 'delete'])->name('clients_delete');
+
+    // 
+    //Route::get('/clients', 'ClientController@index')->name('clients');
+    Route::get('/clients', [\App\Http\Controllers\ClientController::class, 'index'])->name('clients');
+
+    // -------------
+    // PERMISSIONS
+    // -------------
     // -------------
     // COMPANIES
     // -------------
@@ -70,7 +112,7 @@ Route::middleware([
     // -------------
     Route::get('/get_office_types', [EnumController::class, 'getOfficeTypesEnum'])
         ->name('get_office_types');
-    
+
     // -------------
     // HUMANS
     // -------------
@@ -78,18 +120,18 @@ Route::middleware([
     Route::post('/upload-humans', [HumanController::class, 'upload']);
     // Image delete
     Route::post('/upload-humans-revert', [HumanController::class, 'uploadRevert']);
-    
+
     Route::resource('/humans', HumanController::class)->names([
         'index' => 'humans',
     ]);
-    
+
     // -------------
     // ANIMALS
     // -------------
     Route::resource('/animals', AnimalController::class)->names([
         'index' => 'animals',
     ]);
-    
+
     // -------------
     // PATIENTS
     // -------------
@@ -105,24 +147,24 @@ Route::middleware([
     Route::resource('/addresses', AddressController::class)->names([
         'index' => 'addresses'
     ]);
-    
+
     // -------------
     // EXAMINATIONS
     // -------------
     Route::get('/getExaminations', [ExaminationController::class, 'getExaminations'])->name('getExaminations');
     //Route::get('/getExaminations', function(){ print_r('asdasd'); })->name('getExaminations');
-    
+
     Route::resource('/examinations', ExaminationController::class)
         ->names([
             'index' => 'examinations'
-        ]);
-    
+    ]);
+
     // BOOKS
     Route::resource('books', BookController::class)
         ->names([
             'index' => 'books'
-        ]);
-    
+    ]);
+
     // Image Upload
     Route::post('/upload-books', [BookController::class, 'upload']);
     // Image delete
