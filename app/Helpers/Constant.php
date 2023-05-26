@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Helpers;
-
+/*
 class Constant{
     
     const ANIMAL_GROUP = [
@@ -15,3 +15,4 @@ class Constant{
     ];
     
 }
+*/
