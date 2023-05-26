@@ -75,8 +75,35 @@
                         </NavLink>
                     </li>
 
-                    <!-- COMPANIES -->
+                    <!-- ROLES -->
                     <li>
+                        <NavLink :href="route('roles')" 
+                            :active="route().current('roles')">
+                            <BookIcon class="w-4 h-4" />
+                            <span>Roles</span>
+                        </NavLink>
+                    </li>
+
+                    <!-- CLIENTS -->
+                    <li>
+                        <NavLink :href="route('clients')" 
+                            :active="route().current('clients')">
+                            <BookIcon class="w-4 h-4" />
+                            <span>Clients</span>
+                        </NavLink>
+                    </li>
+
+                    <!-- CLIENTS GRID -->
+                    <li>
+                        <NavLink :href="route('clients_grid')" 
+                            :active="route().current('clients_grid')">
+                            <BookIcon class="w-4 h-4" />
+                            <span>Client grids</span>
+                        </NavLink>
+                    </li>
+
+                    <!-- COMPANIES -->
+                    <li v-if="$page.props.policies.company_view">
                         <NavLink :href="route('companies')" 
                             :active="route().current('companies')">
                             <CompaniesIcon class="w-4 h-4" />
