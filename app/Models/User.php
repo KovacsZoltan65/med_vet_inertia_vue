@@ -59,4 +59,38 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        self::created(function(User $user)
+        {
+            if(!$user->roles()->get()->contains(2))
+            {
+                $user->roles()->attach(2);
+            }
+        });
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function checkRole(string $role) : bool
+    {
+        return $this->role === $role;
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return now()->parse($value)->timezone(config('app.timezone'))->format('Y-m-d H:i:s');
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return now()->parse($value)->timezone(config('app.timezone'))->format('Y-m-d H:i:s');
+        //return now()->parse($value)->timezone(config('app.timezone'))->diffForHumans();
+    }
 }
