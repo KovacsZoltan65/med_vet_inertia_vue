@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Database\Factories\OfficeFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\DB;
 
 class OfficeSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class OfficeSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('offices')->truncate();
+        //\Illuminate\Support\Facades\DB::table('offices')->truncate();
         
         $fact = new OfficeFactory();
         $fact->count(15)->create();

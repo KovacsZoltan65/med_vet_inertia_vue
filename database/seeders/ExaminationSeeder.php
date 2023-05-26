@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Database\Factories\ExaminationFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ExaminationSeeder extends Seeder
 {
@@ -13,7 +12,7 @@ class ExaminationSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('examinations')->truncate();
+        //\Illuminate\Support\Facades\DB::table('examinations')->truncate();
         
         $fact = new ExaminationFactory();
         $fact->count(100)->create();

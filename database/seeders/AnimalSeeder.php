@@ -12,7 +12,7 @@ class AnimalSeeder extends Seeder
      */
     public function run(): void
     {
-        \Illuminate\Support\Facades\DB::table('animals')->truncate();
+        //\Illuminate\Support\Facades\DB::table('animals')->truncate();
         
         $fact = new AnimalFactory();
         $fact->count(15)->create();

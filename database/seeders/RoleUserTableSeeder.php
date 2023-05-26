@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+//use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RoleUserTableSeeder extends Seeder
@@ -13,6 +13,8 @@ class RoleUserTableSeeder extends Seeder
      */
     public function run(): void
     {
+        //\Illuminate\Support\Facades\DB::table('role_user')->truncate();
+        
         User::findOrFail(1)->roles()->sync(1);
         User::findOrFail(2)->roles()->sync(2);
     }

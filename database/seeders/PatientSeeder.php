@@ -12,7 +12,7 @@ class PatientSeeder extends Seeder
      */
     public function run(): void
     {
-        \Illuminate\Support\Facades\DB::table('patients')->truncate();
+        //\Illuminate\Support\Facades\DB::table('patients')->truncate();
         
         $fact = new PatientFactory();
         $fact->count(100)->create();

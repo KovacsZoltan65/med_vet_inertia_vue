@@ -13,6 +13,8 @@ class RoleTableSeeder extends Seeder
      */
     public function run(): void
     {
+        //\Illuminate\Support\Facades\DB::table('roles')->truncate();
+        
         $roles = [
             [
                 'id' => 1,

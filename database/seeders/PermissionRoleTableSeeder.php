@@ -14,6 +14,8 @@ class PermissionRoleTableSeeder extends Seeder
      */
     public function run(): void
     {
+        //\Illuminate\Support\Facades\DB::table('permission_role')->truncate();
+        
         $admin_permissions = Permission::all();
         Role::findOrFail(1)->permissions()->sync($admin_permissions->pluck('id'));
 

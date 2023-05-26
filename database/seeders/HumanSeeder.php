@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Database\Factories\HumanFactory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class HumanSeeder extends Seeder {
 
@@ -13,7 +12,7 @@ class HumanSeeder extends Seeder {
      */
     public function run(): void
     {
-        DB::table('humans')->truncate();
+        //\Illuminate\Support\Facades\DB::table('humans')->truncate();
         
         $fact = new HumanFactory();
         $fact->count(25)->create();

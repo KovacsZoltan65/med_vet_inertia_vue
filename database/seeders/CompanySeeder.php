@@ -13,7 +13,7 @@ class CompanySeeder extends Seeder
      */
     public function run(): void
     {
-        \Illuminate\Support\Facades\DB::table('companies')->truncate();
+        //\Illuminate\Support\Facades\DB::table('companies')->truncate();
         
         $fact = new CompanyFactory();
         $fact->count(100)->create();
