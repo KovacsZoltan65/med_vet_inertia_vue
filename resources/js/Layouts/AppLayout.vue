@@ -55,14 +55,13 @@ const logout = () => {
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
-                                <ApplicationMark class="block h-9 w-auto" />
+                                    <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <nav class="bg-white border-gray-200 dark:bg-gray-900">
                                 <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
-
 
                                     <div id="mega-menu-icons"
                                         class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
@@ -252,12 +251,19 @@ const logout = () => {
                         </ResponsiveNavLink>
                     </div>
 
+                    <div class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('companies')" :active="route().current('companies')">
+                            Companies
+                        </ResponsiveNavLink>
+                    </div>
+
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="flex items-center px-4">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="shrink-0 mr-3">
                                 <img class="h-10 w-10 rounded-full object-cover"
-                                    :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name">
+                                    :src="$page.props.auth.user.profile_photo_url" 
+                                    :alt="$page.props.auth.user.name">
                             </div>
 
                             <div>
