@@ -6,15 +6,23 @@ use App\Enums\OfficeType;
 use App\Http\Requests\StoreOfficeRequest;
 use App\Http\Requests\UpdateOfficeRequest;
 use App\Models\Office;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 use Inertia\Inertia;
 
 class OfficeController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(\App\Models\User::class);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        //abort_if(Gate::denies('office_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $offices = Office::query()->paginate(config('app.page_lines'));
 
         foreach($offices as $office){
