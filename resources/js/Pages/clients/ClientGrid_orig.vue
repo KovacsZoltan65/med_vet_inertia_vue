@@ -393,9 +393,9 @@ function saveClient() {
                     </thead>
                     <tbody>
                         <tr v-for="client in state.clients" :key="client.id">
-                            <th scope="row" class="d-flex align-items-center" style="
-					      	border-right: 1px solid #d9d9d9
-				      	">
+                            <th scope="row" 
+                                class="d-flex align-items-center" 
+                                style="border-right: 1px solid #d9d9d9">
 
                                 <div class="ln-list-item__action me-2">
                                     <button class="btn btn-outline-secondary bg-white" type="button"
@@ -406,18 +406,18 @@ function saveClient() {
 
                                 <!-- Confirm before deleting a Client -->
                                 <div class="ln-list-item__action">
-                                    <button class="btn btn-danger" type="button" @click="deleteClient_init(client)">
+                                    <button class="btn btn-danger" type="button" 
+                                        @click="deleteClient_init(client)">
                                         Delete
                                     </button>
                                 </div>
 
-
                             </th>
-                            <td v-show="state.columns.name_first.is_visible" style="">{{ client.name_first }}</td>
-                            <td v-show="state.columns.name_last.is_visible" style="">{{ client.name_last }}</td>
-                            <td v-show="state.columns.email.is_visible" style="">{{ client.email }}</td>
-                            <td v-show="state.columns.description.is_visible" style="">{{ client.description }}</td>
-                            <td v-show="state.columns.tags.is_visible" style="">{{ client.tags.map(t => t.name).join(', ')
+                            <td v-show="state.columns.name_first.is_visible">{{ client.name_first }}</td>
+                            <td v-show="state.columns.name_last.is_visible">{{ client.name_last }}</td>
+                            <td v-show="state.columns.email.is_visible">{{ client.email }}</td>
+                            <td v-show="state.columns.description.is_visible">{{ client.description }}</td>
+                            <td v-show="state.columns.tags.is_visible">{{ client.tags.map(t => t.name).join(', ')
                             }}</td>
                         </tr>
                     </tbody>
@@ -426,8 +426,11 @@ function saveClient() {
 
             </div>
             <div class="mb-3 bg-white shadow bg-body rounded w-75 ln-max-width mx-auto p-3 d-flex align-items-center justify-content-center">
-                <v-pagination v-model="state.pagination.current_page" :pages="state.pagination.total_number_of_pages"
-                    :range-size="state.pagination.range" active-color="#DCEDFF" @update:modelValue="getClients" />
+                <v-pagination v-model="state.pagination.current_page" 
+                    :pages="state.pagination.total_number_of_pages"
+                    :range-size="state.pagination.range" 
+                    active-color="#DCEDFF" 
+                    @update:modelValue="getClients" />
             </div>
 
 

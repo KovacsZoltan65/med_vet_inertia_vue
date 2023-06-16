@@ -191,6 +191,12 @@ function closeForm(){
     state.showModal = false;
 }
 
+function cancelEdit() {
+    state.editing_client = null
+    state.client = newClient()
+    state.selected_tags = []
+}
+
 function newClient() {
     return {
         name_first: null,
@@ -234,12 +240,6 @@ function deleteClient() {
     .catch(err => {
         debugger
     })
-}
-
-function cancelEdit() {
-    state.editing_client = null
-    state.client = newClient()
-    state.selected_tags = []
 }
 
 function saveClient() {
@@ -364,15 +364,6 @@ function saveClient() {
                                     </li>
                                 </ul>
 
-                                <!--<select multiple id="select_tags" 
-                                    @click="updateFilteredTagChips($event.target)"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    v-if="props.tags.length > 0"
-                                    v-model="state.selected_tags">
-                                    <option v-for="tag in props.tags" 
-                                        :value="tag.id" 
-                                        :key="tag.id">{{ tag.name }}</option>
-                                </select>-->
                                 <div v-else>
                                     You don't have any tags.
                                 </div>

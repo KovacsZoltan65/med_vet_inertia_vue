@@ -15,6 +15,10 @@ use Throwable;
 
 class ClientController extends Controller {
 
+    public function __construct() {
+        //$this->authorizeResource(Client::class);
+    }
+    
     public function index()
     {
         $client_tags = TagCategory::where('type_id', TagCategory::TYPE_CLIENT)
@@ -161,8 +165,7 @@ class ClientController extends Controller {
         }
     }
 
-    public function update(Request $request, Client $client)
-    {    
+    public function update(Request $request, Client $client){    
         // name_first is required
         $name_first = $request->get('name_first', $client->name_first);
         $email = $request->get('email', $client->email);
