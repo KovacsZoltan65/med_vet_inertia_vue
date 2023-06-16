@@ -9,10 +9,7 @@
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import TextInput from '@/Components/TextInput.vue';
 
-    onMounted(() => {
-        console.log(props);
-        console.log(page);
-    });
+    onMounted(() => {});
 
     const props = defineProps({
         user: Object,

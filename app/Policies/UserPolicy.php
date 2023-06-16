@@ -33,7 +33,7 @@ class UserPolicy
         }
         
         $retval = in_array('', $permissions);
-        dd($retval);
+        //dd($retval);
         return $retval;
     }
 

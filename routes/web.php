@@ -53,10 +53,14 @@ Route::middleware([
     // -------------
     // ROLES
     // -------------
-    Route::post('/roles/grid-data', [RoleController::class, 'getRoles'])->name('roles/grid-data');
+    Route::post('/roles/grid-data', [RoleController::class, 'getRoles'])
+        ->name('roles_grid_data');
     Route::resource('/roles', RoleController::class)
         ->names([
             'index' => 'roles',
+            'store' => 'roles_store',
+            'update' => 'roles_update',
+            'delete' => 'roles_delete',
     ]);
 
     // -------------
@@ -64,19 +68,19 @@ Route::middleware([
     // -------------
     // clients ondec oldal
     //Route::get('/clients/grid', 'ClientController@grid')->name('clients_grid');
-    Route::get('', [\App\Http\Controllers\ClientController::class, 'grid'])->name('clients_grid');
+    Route::get('/clients/grid', [\App\Http\Controllers\ClientController::class, 'grid'])->name('clients_grid');
 
     // grid adatok lekérése
     //Route::post('/clients/grid-data', 'ClientController@gridData')->name('clients_grid_data');
     Route::post('/clients/grid-data', [\App\Http\Controllers\ClientController::class, 'gridData'])->name('clients_grid_data');
 
-    // client adatok frissítésa
-    //Route::put('/clients/{client}', 'ClientController@update')->name('clients_update');
-    Route::put('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'update'])->name('clients_update');
-
     // client létrehozása
     //Route::post('/clients', 'ClientController@store')->name('clients_store');
     Route::post('/clients', [\App\Http\Controllers\ClientController::class, 'store'])->name('clients_store');
+    
+    // client adatok frissítésa
+    //Route::put('/clients/{client}', 'ClientController@update')->name('clients_update');
+    Route::put('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'update'])->name('clients_update');
 
     // client törlése
     //Route::delete('clients/{client}', 'ClientController@delete')->name('clients_delete');
@@ -89,13 +93,26 @@ Route::middleware([
     // -------------
     // PERMISSIONS
     // -------------
+    
     // -------------
     // COMPANIES
     // -------------
-    Route::get('/get_companies', [CompanyController::class, 'get_companies'])
-        ->name('get_companies');
-    Route::resource('companies', CompanyController::class)->names([
-        'index' => 'companies'
+    Route::post('/companies/grid-data', [\App\Http\Controllers\CompanyController::class, 'gridData'])
+        ->name('companies_grid_data');
+    
+    // Létrehozás
+    //Route::post('/companies', [\App\Http\Controllers\CompanyController::class, 'store'])->name('companies_store');
+    
+    // Módosítás
+    //Route::put('/companies/{company}', [\App\Http\Controllers\CompanyController::class, 'update'])->name('companies_update');
+    
+
+// Törlés
+    Route::delete('/companies/delete', [\App\Http\Controllers\CompanyController::class, 'delete_company'])->name('companies_delete');
+    Route::resource('companies', \App\Http\Controllers\CompanyController::class)->names([
+        'index' => 'companies',
+        'store' => 'companies_store',
+        'update' => 'companies_update',
     ]);
 
     // -------------

@@ -14,7 +14,7 @@ class OfficeController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(\App\Models\User::class);
+        //$this->authorizeResource(\App\Models\User::class);
     }
     /**
      * Display a listing of the resource.
