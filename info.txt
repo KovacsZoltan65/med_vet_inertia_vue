@@ -35,6 +35,17 @@ design: Admin One
 https://github.com/aloha202/laravel9_inertia_vue_crud
 https://snipit.io/public/snippets/72777
 
+Table:
+    https://blog.logrocket.com/table-component-from-scratch-vue-3-bootstrap/
+    https://github.com/Abiola-Farounbi/vue3-table/blob/master/package.json
+
+Search & Filter:
+    https://www.youtube.com/watch?v=6NXyDSu9kqQ&ab_channel=BuildtoLearn
+    https://github.com/patrickodacre/laravel-snippets
+
+Pagination:
+    npm i @hennge/vue3-pagination
+
 laravel new laravel_inertia_vue_crud
 composer require laravel/jetstream
 php artisan jetstream:install inertia
@@ -42,8 +53,30 @@ php artisan jetstream:install inertia
 composer require --dev kitloong/laravel-migrations-generator
 php artisan migrate:generate
 php artisan migrate:fresh
+php artisan migrate:fresh --seed
+
+php artisan db:seed --class=Database\Seeders\PermissionTableSeeder
 
 php artisan migrate
+
+Roles and Permissions
+    php artisan make:model Role
+    php artisan make:model Permission
+    
+    php artisan make:migration create_roles_table
+    php artisan make:migration create_permission_table
+    php artisan make:migration create_permission_role_pivot_table
+    php artisan make:migration create_role_user_pivot_table
+
+    php artisan make:seeder RoleTableSeeder
+    php artisan make:seeder PermissionTableSeeder
+    php artisan make:seeder PermissionRoleTableSeeder
+    php artisan make:seeder RoleUserTableSeeder
+
+    php artisan make:middleware AuthGates
+
+ Nyelvi beállítás:
+    https://laraveldaily.com/post/set-laravel-user-locale-middleware?mtm_campaign=20230518-newsletter
 
 php artisan make:model Book --all
 
@@ -63,12 +96,17 @@ npm install @heroicons/vue
 
 php artisan make:observer HumanObserver --model=Human
 
+php artisan make:model Role --all
+php artisan make:observer RoleObserver --model=Role
 
-
-
+php artisan make:model Permission --all
+php artisan make:observer PermissionObserver --model=Permission
 
 php artisan make:model Animal --all
 php artisan make:observer AnimalObserver --model=Animal
 
 php artisan make:model Patient --all
 php artisan make:observer PatientObserver --model=Patient
+
+php artisan make:model Examination --all
+php artisan make:observer ExaminationObserver --model=Examination
