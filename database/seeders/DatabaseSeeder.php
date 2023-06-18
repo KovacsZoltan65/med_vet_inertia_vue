@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             AnimalGroupSeeder::class,
             AnimalSexSeeder::class,
             HumanTypeSeeder::class,
+            OfficeTypeSeeder::class,
         ]);
     }
 }

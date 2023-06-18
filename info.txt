@@ -122,3 +122,6 @@ php artisan make:observer AnimalSexObserver --model=AnimalSex
 
 php artisan make:model HumanType --all
 php artisan make:observer HumanTypexObserver --model=HumanType
+
+php artisan make:model OfficeType --all
+php artisan make:observer OfficeTypexObserver --model=OfficeType
