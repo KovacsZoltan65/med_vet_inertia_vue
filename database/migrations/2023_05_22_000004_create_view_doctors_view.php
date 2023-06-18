@@ -12,7 +12,16 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE VIEW `view_doctors` AS select `laravel_inertia_vue_crud`.`humans`.`id` AS `id`,`laravel_inertia_vue_crud`.`humans`.`name` AS `name`,`laravel_inertia_vue_crud`.`humans`.`type_id` AS `type_id`,`laravel_inertia_vue_crud`.`humans`.`image` AS `image`,`laravel_inertia_vue_crud`.`humans`.`created_at` AS `created_at`,`laravel_inertia_vue_crud`.`humans`.`updated_at` AS `updated_at` from `laravel_inertia_vue_crud`.`humans` where `laravel_inertia_vue_crud`.`humans`.`type_id` = 3");
+        DB::statement("DROP VIEW IF EXISTS `laravel_inertia_vue_crud`.`view_doctors`;");
+        DB::statement("CREATE VIEW `laravel_inertia_vue_crud`.`view_doctors` AS 
+            SELECT `h`.`id` AS `id`,
+                   `h`.`name` AS `name`,
+                   `h`.`type_id` AS `type_id`,
+                   `h`.`image` AS `image`,
+                   `h`.`created_at` AS `created_at`,
+                   `h`.`updated_at` AS `updated_at` 
+            FROM `laravel_inertia_vue_crud`.`humans` `h` 
+            WHERE `h`.`type_id` = 3;");
     }
 
     /**
@@ -22,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW IF EXISTS `view_doctors`");
+        DB::statement("DROP VIEW IF EXISTS `laravel_inertia_vue_crud`.`view_doctors`;");
     }
 };
