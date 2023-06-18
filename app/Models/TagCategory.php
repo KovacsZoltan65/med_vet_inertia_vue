@@ -22,15 +22,15 @@ class TagCategory extends Model {
     public static function types() {
         return [
             self::TYPE_CLIENT => $client = [
-            'id' => self::TYPE_CLIENT,
-            'tag' => 'client',
-            'name' => 'Client',
+                'id' => self::TYPE_CLIENT,
+                'tag' => 'client',
+                'name' => 'Client',
             ],
             'client' => $client,
             self::TYPE_PROJECT => $project = [
-            'id' => self::TYPE_PROJECT,
-            'tag' => 'project',
-            'name' => 'Project',
+                'id' => self::TYPE_PROJECT,
+                'tag' => 'project',
+                'name' => 'Project',
             ],
             'project' => $project,
         ];
