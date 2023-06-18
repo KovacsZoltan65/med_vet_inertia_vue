@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\OfficeType;
 
-class OfficeTypexObserver
+class OfficeTypeObserver
 {
     /**
      * Handle the OfficeType "created" event.
