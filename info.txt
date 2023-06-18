@@ -110,3 +110,12 @@ php artisan make:observer PatientObserver --model=Patient
 
 php artisan make:model Examination --all
 php artisan make:observer ExaminationObserver --model=Examination
+
+php artisan make:model AddressType --all
+php artisan make:observer AddressTypeObserver --model=AddressType
+
+php artisan make:model AnimalGroup --all
+php artisan make:observer AnimalGroupObserver --model=AnimalGroup
+
+php artisan make:model AnimalSex --all
+php artisan make:observer AnimalSexObserver --model=AnimalSex

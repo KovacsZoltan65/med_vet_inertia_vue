@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
 
             AddressTypeSeeder::class,
             AnimalGroupSeeder::class,
+            AnimalSexSeeder::class,
         ]);
     }
 }
