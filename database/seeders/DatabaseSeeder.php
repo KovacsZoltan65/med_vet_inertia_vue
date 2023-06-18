@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\AnimalGroup;
 use App\Models\OfficeType;
 use Illuminate\Database\Seeder;
 
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
             RoleUserTableSeeder::class,
 
             AddressTypeSeeder::class,
+            AnimalGroupSeeder::class,
         ]);
     }
 }
