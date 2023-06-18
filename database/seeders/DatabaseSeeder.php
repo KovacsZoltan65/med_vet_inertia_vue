@@ -32,9 +32,11 @@ class DatabaseSeeder extends Seeder
             PermissionRoleTableSeeder::class,
             RoleUserTableSeeder::class,
 
+            // TÍPUSOK
             AddressTypeSeeder::class,
             AnimalGroupSeeder::class,
             AnimalSexSeeder::class,
+            HumanTypeSeeder::class,
         ]);
     }
 }
