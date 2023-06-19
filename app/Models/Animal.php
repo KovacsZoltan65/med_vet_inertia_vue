@@ -19,10 +19,18 @@ class Animal extends Model
     use HasFactory;
     
     protected $table = 'animals';
-    protected $fillable = ['name', 'sex', 'group_id'];
+    protected $fillable = ['name', 'sex_id', 'group_id'];
     
     //protected $casts = [
     //    'sex' => AnimalSex::class,
     //    'group' => AnimalGroup::class,
     //];
+    
+    public function sex(){
+        return $this->hasOne(AnimalSex::class, 'id', 'sex_id');
+    }
+    
+    public function group(){
+        return $this->hasOne(AnimalGroup::class, 'id', 'group_id');
+    }
 }

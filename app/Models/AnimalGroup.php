@@ -23,6 +23,6 @@ class AnimalGroup extends Model
     protected $fillable = ['name', 'label'];
     
     public function animals(){
-        return $this->hasMany(Animal::class, 'id', 'group_id');
+        return $this->hasMany(Animal::class, 'group_id', 'id');
     }
 }

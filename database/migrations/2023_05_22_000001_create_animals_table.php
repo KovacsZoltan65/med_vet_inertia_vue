@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('animals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->integer('sex');
+            $table->integer('sex_id');
             $table->integer('group_id');
             $table->timestamps();
         });
