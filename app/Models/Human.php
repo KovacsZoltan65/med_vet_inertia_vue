@@ -15,26 +15,30 @@ class Human extends Model
     public static function doctors(){
         
         //$data = Human::where('type_id', '=', HumanType::ORVOS)->get();
-        $data = \DB::table('view_humans')
-            ->where('type_id', '=', HumanType::ORVOS)
-            ->get();
+        //$data = \DB::table('view_humans')->where('type_id', '=', HumanType::ORVOS)->get();
+        $data = Human::where('type_id', '=', 0)->orderBy('name', 'asc')->get();
         
         return $data;
     }
     
-    public static function toSelect() : array{
-        $humans = [];
+    // A kapcsolat rekordot adja vissza
+    public function type(){
+        return $this->hasOne(App\Models\HumanType, 'id', 'type_id');
+    }
+
+    //public static function toSelect() : array{
+    //    $humans = [];
         
-        $d = self::query()->select(['id', 'name'])->orderBy('name', 'asc')->get();
+    //    $d = self::query()->select(['id', 'name'])->orderBy('name', 'asc')->get();
         
-        foreach($d as $a){
-            $obj = (object)['id' => $a->id, 'name' => $a->name,];
+    //    foreach($d as $a){
+    //        $obj = (object)['id' => $a->id, 'name' => $a->name,];
             
-            array_push($humans, $obj);
-        }
+    //        array_push($humans, $obj);
+    //    }
         
         //dd($humans);
         
-        return $humans;
-    }
+    //    return $humans;
+    //}
 }

@@ -18,12 +18,13 @@ class Company extends Model
     public static function toSelect(){
         $companies = [];
         
-        $d = self::query()->select(['id', 'name'])->orderBy('name', 'asc')->get();
+        //$d = self::query()->select(['id', 'name'])->orderBy('name', 'asc')->get();
+        //foreach($d as $a){
+        //    array_push($companies, (object)['id' => $a->id,'name' => $a->name,]);
+        //}
         
-        foreach($d as $a){
-            array_push($companies, (object)['id' => $a->id,'name' => $a->name,]);
-        }
-        
+        $d = self::query()->select(['id', 'name'])->orderBy('name', 'asc')->get()->toArray();
+
         return $companies;
     }
     
