@@ -21,7 +21,7 @@ class AnimalFactory extends Factory
         return [
             'name' => fake()->firstName($sex),
             'sex' => $sex,
-            'group' => fake()->randomFloat(0, 1, 2),
+            'group_id' => fake()->randomFloat(0, 1, 2),
         ];
     }
 }

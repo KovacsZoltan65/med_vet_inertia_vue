@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->integer('sex');
-            $table->string('group')->default('0');
+            $table->integer('group_id');
             $table->timestamps();
         });
     }
