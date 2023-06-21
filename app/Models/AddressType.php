@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -22,7 +23,7 @@ class AddressType extends Model
     protected $table = 'address_types';
     protected $fillable = ['name', 'label'];
     
-    public function addresses(){
+    public function addresses(): HasMany{
         // Ez a kód a modellben található. 
         // A hasMany kapcsolat azt jelenti, hogy az adott modellhez több másik 
         // modell is tartozhat. A hasMany kapcsolatban az első argumentum a 

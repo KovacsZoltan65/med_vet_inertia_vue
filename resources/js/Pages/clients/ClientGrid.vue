@@ -174,8 +174,6 @@ function getClients(page = state.pagination.current_page) {
             //debugger
             console.log(err);
         })
-
-
 }
 
 function newClient_init() {

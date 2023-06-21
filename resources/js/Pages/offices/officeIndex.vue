@@ -1,225 +1,334 @@
-<script>
+<script setup>
+    import { reactive, onMounted, watch, computed } from 'vue';
+    import axios from 'axios';
+
     import AppLayout from '../../Layouts/AppLayout.vue';
-
-    import Pagination from '../../Components/Pagination.vue';
     import DialogModal from '../../Components/DialogModal.vue';
-    import OfficeForm from './officeForm.vue';
 
-    import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
+    import VPagination from '@hennge/vue3-pagination';
+    import '@hennge/vue3-pagination/dist/vue3-pagination.css';
+
     import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
-    import AddButton from '../../Components/buttons/AddButton.vue';
-    import EditButton from '../../Components/buttons/EditButton.vue';
-    import DeleteButton from '../../Components/buttons/DeleteButton.vue';
+import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
 
-    import ArrowRightOnRectangleIcon from '../../Components/icons/ArrowRightOnRectangleIcon.vue';
+    const local_storage_column_key = 'ln_office_grid_columns';
 
-    import {
-        PlusIcon, PencilIcon, TrashIcon, CircleStackIcon
-    } from '@heroicons/vue/24/solid';
+    const props = defineProps({
+        tags: Array
+    });
+    const defaultFormObject = { name: null };
 
-    import Success from '../../Components/alerts/Success.vue';
+    const state = reactive({
+        editing_office: null,
+        deleting_office: null,
 
-    const defaultTypeObject = {
-        id: 0, name: null, type_id: 0
-    };
+        office: newOffice(),
+        offices: [],
 
-    export default (await import('vue')).defineComponent({
-        name: 'Offices',
-        props: ['data'],
-        components: {
-            AppLayout,
-            Pagination,
-            DialogModal,
-            OfficeForm,
-            PrimaryButton, SecondaryButton, 
-            AddButton, EditButton, DeleteButton,
-            PlusIcon, PencilIcon, TrashIcon, CircleStackIcon,
-            Success, ArrowRightOnRectangleIcon
+        tags: [],
+        tag_filter_terms: '',
+        filtered_tag_chips: [],
+
+        showEditModal: false,
+        showDeleteModal: false,
+        showSettingsModal: false,
+
+        isEdit: false,
+        forMobject: defaultFormObject,
+
+        selected_tags: [],
+        filters: {
+            tags: [],
+            search: null
         },
-        setup() {},
-        data() {
-            return {
-                showModal: false,
-                isEdit: false,
-                formObject: defaultTypeObject,
 
-                selected: [],
-                selectAll: false,
+        columns: {
+            name: {
+                label: 'Name',
+                is_visible: true,
             }
         },
-        mounted() { },
-        created() { },
-        methods: {
-            
-            select(){
-                this.selected = [];
-                if( !this.selectAll ){
-                    for( let i in this.data.data ){
-                        this.selected.push(this.data.data[i].id)
-                    }
-                }
-            },
 
-            openForm(item) {
-                this.isEdit = !!item;
-                this.formObject = item ? Object.assign({}, item) : defaultTypeObject;
-                this.showModal = true;
+        pagination: {
+            current_page: 1,
+            total_number_of_pages: 0,
+            per_page: 10,
+            range: 5,
+        },
+    });
 
-                this.$page.props.errors = {};
-            },
+    const tag_filter_options = computed(() => {
+        if( !state.tag_filter_terms ){
+            return props.tags;
+        }
+        const search = state.tag_filter_terms.toLowerCase();
 
-            closeForm() {
-                this.showModal = false;
-                this.formObject = defaultTypeObject;
-            },
+        return props.tags.filter(t => t.name.toLowerCase().indexOf(search) > -1);
+    });
 
-            saveItem(item) {
-                let url = '/offices';
-                if (item.id) {
-                    url += `/${item.id}`;
-                    item._method = 'PUT';
-                }
+    watch(state.columns, (new_value, old_value) => {
+        localStorage.setItem(local_storage_column_key, JSON.stringify(new_value));
+    });
 
-                this.$inertia.post(url, item, {
-                    onError: (err) => { console.log(err); },
-                    onSuccess: () => {
-                        this.closeForm();
-                    },
-                });
+    onMounted(async () => {
+        getClients();
 
-            },
-            
-            deleteItem() {
-                console.log('deleteItem', this.formObject);
-            },
+        let columns = local_storage_column_key.getItem(ln_office_grid_columns);
+        if( columns ){
+            columns = JSON.parse(columns);
+            for( const column_name in columns ){
+                state.columns[column_name] = columns[column_name];
+            }
         }
     });
+
+    function updateFilteredTagChips(tag){
+        let found = false;
+
+        for( let i = 0; i < state.filtered_tag_chips.length; i++ ){
+            if( state.filtered_tag_chips[i].name === tag.id ){
+                found = true;
+            }
+        }
+
+        if( found ) return;
+
+        state.filtered_tag_chips.push( JSON.parse(JSON.stringify(tag)) );
+
+        getOffices();
+    }
+
+    function removeChip(chip){
+        state.filters.tags = state.filtered_tag_chips.map(tag => tag.id);
+
+        getOffices();
+    }
+
+    function getOffices(page = state.pagination.current_page){
+        state.filters.tags = state.filtered_tag_chips.map(tag => tag.id);
+
+        axios.post('/offices/grid-data', {
+            filters: state.filters,
+            config: {
+                per_page: state.pagination.per_page,
+            },
+            page,
+        })
+        .then(res => {
+            state.pagination.total_number_of_pages = res.data.offices.last_pages;
+            state.pagination.current_page = res.data.offices.current_page;
+            state.offices = res.data.offices.data;
+        })
+        .catch(err => { console.log(); });
+    }
+
+    // ==============
+    // NEW OFFICE
+    // ==============
+    function newOffice_init(){
+        state.office = newOffice();
+        state.editing_office = null;
+        state.isEdit = false;
+    }
+
+    function newOffice(){
+        return {
+            name: null,
+        };
+    }
+    // ==============
+
+    // ==============
+    // EDIT OFFICE
+    // ==============
+    function editOffice(_office){
+        state.editing_office = JSON.parse(JSON.stringify(_office));
+        state.office = state.editing_office;
+        state.selected_tags = state.office.tags.map(t => t.id);
+        state.isEdit = true;
+
+        openEditModal();
+    }
+    // ==============
+
+    // ==============
+    // DELETE OFFICE
+    // ==============
+    function deleteOffice_init(_office){
+        state.editing_office = JSON.parse(JSON.stringify(_office));
+        state.office = state.editing_office;
+        state.selected_tags = state.office.tags.map(t => t.id);
+        state.isEdit = true;
+    }
+    function deleteOffice(){
+        axios.delete(route('office_delete', {office: state.deleting_office.id}))
+        .then(res => {
+            state.offices = state.offices.filter(k => k.id != state.deleting_office.id);
+            state.deleting_office = null;
+            closeDeleteModal();
+        })
+        .catch(err => { console.log(err); });
+    }
+    // ==============
+
+    function saveOffice(){
+        if( state.editing_office && state.editing_office.id ){
+            axios.put(route('office_update'), {client:state.editing_office.id}, 
+            {
+                name: state.office.name,
+                tags: state.selected_tags,
+            })
+            .then(res => {
+                closeEditModal();
+                const k = res.data.office;
+
+                for(  let i = 0; i < state.offices.length; i++ ){
+                    if( state.offices[i].id === k.id ){
+                        state.offices[i].id = k;
+                    }
+                }
+            })
+            .catch(err => { console.log(err); });
+
+            cancelEdit();
+            return;
+        }
+
+        axios.post(route('office_store'), {
+            name: state.office.name,
+            tags: state.selected_tags,
+        })
+        .then(res => {
+            state.office = newOffice();
+            state.offices.push(res.data.office);
+            closeEditModal();
+        })
+        .error(err => { console.log(err); });
+    }
+
+    function cancelEdit(){
+        state.editing_office = null;
+        state.office = newOffice();
+        state.selected_tags = [];
+    }
+
+    // ==============
+    // EDIT MODAL
+    // ==============
+    function openEditModal(){ state.showEditModal = true; }
+    function closeEditModal(){ state.showEditModal = false; }
+
+    // ==============
+
+    // ==============
+    // DELETE MODAL
+    // ==============
+    function openDeleteModal(){ state.showDeleteModal = true; }
+    function closeDeleteModal(){ state.showDeleteModal = false; }
+
+    // ==============
+
+    // ==============
+    // SETTINGS MODAL
+    // ==============
+    function openSettingsModal(){ state.showSettingsModal = true; }
+    function closeSettingsModal(){ state.showSettingsModal = false; }
+    // ==============
+
+    
 </script>
 
 <template>
-    <AppLayout title="Offices">
+    <AppLayout title="OfficeGrid">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Offices
-            </h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Office Grid</h2>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
+        <div class="py-2"></div>
 
-                    <!-- Üzenetek -->
-                    <Success :message="$page.props.flash.message" v-if="$page.props.flash.message" />
+        <div class="py-2"></div>
 
-                    <!-- NEW button -->
-                    <AddButton type="button" @click="openForm()">
-                        <PlusIcon class="h-5 w-5" />
-                    </AddButton>
+        <div class="py-2"></div>
 
-                    <!-- Office list -->
-                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        
-                        <div class="text-uppercase text-bold">id selected: {{selected}}</div>
-
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <!-- SELECT ALL -->
-                                    <th scope="col" class="p-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-all-search" 
-                                                type="checkbox"
-                                                v-model="selectAll" 
-                                                @click="select"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-all-search" 
-                                                class="sr-only">checkbox</label>
-                                        </div>
-                                    </th>
-                                    <!-- NAME -->
-                                    <th scope="col" class="px-6 py-3">Name</th>
-                                    <!-- TYPE -->
-                                    <th scope="col" class="px-6 py-3">Type</th>
-                                    <!-- ACTION -->
-                                    <th scope="col" class="px-6 py-3">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="item in data.data" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    
-                                    <!-- Row checkbox -->
-                                    <td class="w-4 p-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-search-1" 
-                                                type="checkbox"
-                                                :value="item.id"
-                                                v-model="selected"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    
-                                    <!-- Name -->
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ item.name }}
-                                    </th>
-
-                                    <!-- Type -->
-                                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ item.type_name }}
-                                    </td>
-
-                                    <td class="px-6 py-4">
-
-                                        <!-- EDIT button -->
-                                        <EditButton type="button" 
-                                            @click="openForm(item)">
-                                            <PencilIcon class="h-5 w-5" />
-                                        </EditButton>
-
-                                        <!-- DELETE button -->
-                                        <DeleteButton class="ml-3">
-                                            <TrashIcon class="h-5 w-5" />
-                                        </DeleteButton>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- PAGINATION -->
-                    <div class="flex items-center justify-between pt-4" aria-label="Table navigation">
-                        <Pagination :links="data.links"></Pagination>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Office Modal -->
-        <DialogModal :show="showModal">
-            <template #title>
-                Office
-            </template>
+        <!-- settings modal -->
+        <DialogModal :show="state.showSettingsModal" id="modal_settings">
+            <template #title>SETTINGS</template>
             <template #content>
-                <OfficeForm :form="formObject" :isEdit="isEdit"></OfficeForm>
+                <fieldset>
+                    <legend class="sr-only">Checkbox variant</legend>
+
+                    <div class="flex items-center mb-4" 
+                        v-for="(config, column) in state.columns" :key="column">
+                        <input v-model="config.is_visible" 
+                            :id="column" type="checkbox" value=""
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label :for="column" 
+                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >{{ config.label }}</label>
+                    </div>
+                </fieldset>
             </template>
             <template #footer>
-                <!-- Cancel Button -->
-                <SecondaryButton type="button" @click="closeForm()" class="self-start">
-                    <ArrowRightOnRectangleIcon class="w-6 h-6" />
-                </SecondaryButton>
+                <SecondaryButton @click="closeSettingsModal()">CLOSE</SecondaryButton>
+            </template>
+        </DialogModal>
 
-                <!-- Create Button -->
-                <PrimaryButton type="button" class="ml-3" v-show="!isEdit" @click="saveItem(formObject)">
-                    <CircleStackIcon class="h-5 w-5" />
-                </PrimaryButton>
+        <!-- edit modal -->
+        <DialogModal :show="state.showEditModal" id="modal_edit">
+            <template #title>
+                <span v-if="state.editing_office && state.editing_office.id">Edit Office</span>
+                <span v-else>Create Office</span>
+                {{ state.isEdit? 'EDIT' : 'CREATE' }} OFFICE
+            </template>
+            
+            <template #content>
+                <div class="mb-6">
+                    <label for="name_first" 
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Name</label>
+                    <input type="text" id="name_first" 
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        placeholder="John" 
+                        v-model="state.office.name"
+                        required>
+                </div>
 
-                <!-- Update Button -->
-                <PrimaryButton type="button" class="ml-3" v-show="isEdit" @click="saveItem(formObject)">
-                    <CircleStackIcon class="h-5 w-5" />
+                <!-- Select Tags -->
+                <div class="mb-6">
+                    <label for="select_tags" 
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Select Tags</label>
+                    
+                    <select multiple id="select_tags" 
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        v-if="props.tags.length > 0"
+                        v-model="state.selected_tags">
+                        <option v-for="tag in props.tags" 
+                            :value="tag.id" 
+                            :key="tag.id">{{ tag.name }}</option>
+                    </select>
+                    <div v-else>
+                        You don't have any tags.
+                    </div>
+                </div>
+            </template>
+
+            <template #footer>
+                <SecondaryButton type="button" class="self-start" 
+                                 @click="closeEditModal()">Cancel</SecondaryButton>
+                <PrimaryButton type="button" class="ml-3" 
+                               @click="saveOffice()">
+                    {{ state.isEdit ? 'SAVE' : 'CREATE' }} OFFICE
                 </PrimaryButton>
+            </template>
+        </DialogModal>
+
+        <!-- delete modal -->
+        <DialogModal :show="state.showDeleteModal" id="modal_delete">
+            <template #title>DELETE CLIENT</template>
+            <template #content>Are you sure you want to delete this Client?</template>
+            <template #footer>
+                <SecondaryButton @click="closeDeleteModal()">Cancel</SecondaryButton>
             </template>
         </DialogModal>
 

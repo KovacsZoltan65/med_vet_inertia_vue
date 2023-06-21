@@ -2,46 +2,46 @@
 
 namespace App\Observers;
 
-use App\Models\Addresses;
+use App\Models\Address;
 
-class AddressesObserver
+class AddressObserver
 {
     /**
-     * Handle the Addresses "created" event.
+     * Handle the Address "created" event.
      */
-    public function created(Addresses $addresses): void
+    public function created(Address $address): void
     {
         //
     }
 
     /**
-     * Handle the Addresses "updated" event.
+     * Handle the Address "updated" event.
      */
-    public function updated(Addresses $addresses): void
+    public function updated(Address $address): void
     {
         //
     }
 
     /**
-     * Handle the Addresses "deleted" event.
+     * Handle the Address "deleted" event.
      */
-    public function deleted(Addresses $addresses): void
+    public function deleted(Address $address): void
     {
         //
     }
 
     /**
-     * Handle the Addresses "restored" event.
+     * Handle the Address "restored" event.
      */
-    public function restored(Addresses $addresses): void
+    public function restored(Address $address): void
     {
         //
     }
 
     /**
-     * Handle the Addresses "force deleted" event.
+     * Handle the Address "force deleted" event.
      */
-    public function forceDeleted(Addresses $addresses): void
+    public function forceDeleted(Address $address): void
     {
         //
     }

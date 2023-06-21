@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AddressType;
-use App\Http\Requests\StoreAddressesRequest;
-use App\Http\Requests\UpdateAddressesRequest;
-use App\Models\Addresses;
+use App\Http\Requests\StoreAddressRequest;
+use App\Http\Requests\UpdateAddressRequest;
+use App\Models\Address;
 use App\Models\Company;
 use App\Models\Human;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class AddressController extends Controller
             //dd($query);
         }
         
-        $data = Addresses::query()
+        $data = Address::query()
             ->paginate(config('app.page_lines'));
         
         foreach($data as $address){
@@ -52,7 +52,7 @@ class AddressController extends Controller
 
         //dd($companies, $humans, $addressTypes);
         
-        return Inertia::render('addresses/addressIndex', [
+        return Inertia::render('address/addressIndex', [
             'data' => $data,
             'companies' => $companies,
             'humans' => $humans,
@@ -71,7 +71,7 @@ class AddressController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAddressesRequest $request)
+    public function store(StoreAddressRequest $request)
     {
         //
     }
@@ -79,7 +79,7 @@ class AddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Addresses $addresses)
+    public function show(Address $address)
     {
         //
     }
@@ -87,7 +87,7 @@ class AddressController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Addresses $addresses)
+    public function edit(Address $address)
     {
         //
     }
@@ -95,7 +95,7 @@ class AddressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAddressesRequest $request, Addresses $addresses)
+    public function update(UpdateAddressRequest $request, Address $address)
     {
         //
     }
@@ -103,7 +103,7 @@ class AddressController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Addresses $addresses)
+    public function destroy(Address $address)
     {
         //
     }

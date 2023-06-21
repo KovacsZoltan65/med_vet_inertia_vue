@@ -16,7 +16,7 @@ class Address extends Model
 {
     use HasFactory;
     
-    protected $table = 'addresses';
+    protected $table = 'address';
     protected $fillable = ['company_id', 'human_id', 'type_id', 'city', 'address'];
     
     public function human()
