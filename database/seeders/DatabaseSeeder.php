@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             HumanSeeder::class,
             AnimalSeeder::class,
             PatientSeeder::class,
-            AddressesSeeder::class,
+            AddressSeeder::class,
             ExaminationSeeder::class,
 
             PermissionTableSeeder::class,

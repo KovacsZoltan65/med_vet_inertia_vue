@@ -22,6 +22,7 @@ class AddressType extends Model
     protected $table = 'address_types';
     protected $fillable = ['name', 'label'];
     
+    // Tipushoz tartozó címek
     public function addresses(){
         // Ez a kód a modellben található. 
         // A hasMany kapcsolat azt jelenti, hogy az adott modellhez több másik 

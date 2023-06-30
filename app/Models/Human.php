@@ -26,19 +26,19 @@ class Human extends Model
         return $this->hasOne(App\Models\HumanType, 'id', 'type_id');
     }
 
-    //public static function toSelect() : array{
-    //    $humans = [];
+    public static function toSelect() : array{
+        $humans = [];
         
-    //    $d = self::query()->select(['id', 'name'])->orderBy('name', 'asc')->get();
+        $d = self::query()->select(['id', 'name'])->orderBy('name', 'asc')->get();
         
-    //    foreach($d as $a){
-    //        $obj = (object)['id' => $a->id, 'name' => $a->name,];
+        foreach($d as $a){
+            $obj = (object)['id' => $a->id, 'name' => $a->name,];
             
-    //        array_push($humans, $obj);
-    //    }
+            array_push($humans, $obj);
+        }
         
         //dd($humans);
         
-    //    return $humans;
-    //}
+        return $humans;
+    }
 }

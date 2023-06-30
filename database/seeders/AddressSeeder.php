@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AddressesSeeder extends Seeder
+class AddressSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class AddressesSeeder extends Seeder
     {
         //\Illuminate\Support\Facades\DB::table('addresses')->truncate();
         
-        $fact = new \Database\Factories\AddressesFactory();
+        $fact = new \Database\Factories\AddressFactory();
         $fact->count(25)->create();
     }
 }

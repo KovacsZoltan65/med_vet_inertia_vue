@@ -120,10 +120,10 @@
                         </NavLink>
                     </li>
 
-                    <!-- ADDRESSES -->
+                    <!-- ADDRESS -->
                     <li>
-                        <NavLink :href="route('addresses')" 
-                            :active="route().current('addresses')">
+                        <NavLink :href="route('address')" 
+                            :active="route().current('address')">
                             <AcademicCapIcon class="w-4 h-4 mr-2" />
                             <span>Addresses</span>
                         </NavLink>

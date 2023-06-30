@@ -86,8 +86,8 @@ php artisan make:model Office --all
 
 php artisan make:model Human --all
 
-php artisan make:model Addresses --all
-php artisan make:observer AddressesObserver --model=Addresses
+php artisan make:model Address --all
+php artisan make:observer AddressObserver --model=Address
 
 npm install filepond vue-filepond filepond-plugin-file-poster filepond-plugin-file-validate-type filepond-plugin-image-preview
 php artisan make:observer BookObserver --model=Book

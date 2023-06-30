@@ -161,8 +161,8 @@ Route::middleware([
     // -------------
     // ADDRESSES
     // -------------
-    Route::resource('/addresses', AddressController::class)->names([
-        'index' => 'addresses'
+    Route::resource('/address', AddressController::class)->names([
+        'index' => 'address'
     ]);
 
     // -------------
