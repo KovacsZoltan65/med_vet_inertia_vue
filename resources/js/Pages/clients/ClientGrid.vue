@@ -1,302 +1,302 @@
 <script setup>
-import { reactive, onMounted, watch, computed } from 'vue';
-import axios from 'axios';
-import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
-import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
+    import { reactive, onMounted, watch, computed } from 'vue';
+    import axios from 'axios';
+    import SecondaryButton from '../../Components/buttons/SecondaryButton.vue';
+    import PrimaryButton from '../../Components/buttons/PrimaryButton.vue';
 
-import DialogModal from '../../Components/DialogModal.vue';
-import AddButton from '../../Components/buttons/AddButton.vue';
-import AppLayout from '../../Layouts/AppLayout.vue';
-import EditButton from '../../Components/buttons/EditButton.vue';
-import DeleteButton from '../../Components/buttons/DeleteButton.vue';
+    import DialogModal from '../../Components/DialogModal.vue';
+    import AddButton from '../../Components/buttons/AddButton.vue';
+    import AppLayout from '../../Layouts/AppLayout.vue';
+    import EditButton from '../../Components/buttons/EditButton.vue';
+    import DeleteButton from '../../Components/buttons/DeleteButton.vue';
 
-import VPagination from '@hennge/vue3-pagination';
-import '@hennge/vue3-pagination/dist/vue3-pagination.css';
+    import VPagination from '@hennge/vue3-pagination';
+    import '@hennge/vue3-pagination/dist/vue3-pagination.css';
 
-const local_storage_column_key = 'ln_client_grid_columns';
+    const local_storage_column_key = 'ln_client_grid_columns';
 
-const props = defineProps({
-    tags: Array,
-});
+    const props = defineProps({
+        tags: Array,
+    });
 
-const defaultFormObject = {
-    name_first: null, name_last: null, email: null, description: null,
-};
+    const defaultFormObject = {
+        name_first: null, name_last: null, email: null, description: null,
+    };
 
-const state = reactive({
-    editing_client: null,
-    deleting_client: null,
+    const state = reactive({
+        editing_client: null,
+        deleting_client: null,
 
-    client: newClient(),
-    clients: [],
-    tags: [],
-    tag_filter_terms: '',
-    filtered_tag_chips: [],
-
-    showModal: false,
-    showDeleteModal: false,
-    showSettingsModal: false,
-
-    isEdit: false,
-    formObject: defaultFormObject,
-
-    selected_tags: [],
-    filters: {
+        client: newClient(),
+        clients: [],
         tags: [],
-        search: null,
-    },
+        tag_filter_terms: '',
+        filtered_tag_chips: [],
 
-    columns: {
-        name_first: {
-            label: 'First Name',
-            is_visible: true,
+        showModal: false,
+        showDeleteModal: false,
+        showSettingsModal: false,
+
+        isEdit: false,
+        formObject: defaultFormObject,
+
+        selected_tags: [],
+        filters: {
+            tags: [],
+            search: null,
         },
-        name_last: {
-            label: 'Last Name',
-            is_visible: true,
+
+        columns: {
+            name_first: {
+                label: 'First Name',
+                is_visible: true,
+            },
+            name_last: {
+                label: 'Last Name',
+                is_visible: true,
+            },
+            email: {
+                label: 'Email',
+                is_visible: true,
+            },
+            description: {
+                label: 'Description',
+                is_visible: true,
+            },
+            tags: {
+                label: 'Tags',
+                is_visible: true,
+            },
         },
-        email: {
-            label: 'Email',
-            is_visible: true,
+
+        pagination: {
+            current_page: 1,
+            total_number_of_pages: 0,
+            per_page: 10,
+            range: 5,
         },
-        description: {
-            label: 'Description',
-            is_visible: true,
-        },
-        tags: {
-            label: 'Tags',
-            is_visible: true,
-        },
-    },
+    });
 
-    pagination: {
-        current_page: 1,
-        total_number_of_pages: 0,
-        per_page: 10,
-        range: 5,
-    },
-});
-
-const tag_filter_options = computed(() => {
-    if( !state.tag_filter_terms )
-    {
-        return props.tags;
-    }
-
-    const search = state.tag_filter_terms.toLowerCase();
-
-    return props.tags.filter(t => t.name.toLowerCase().indexOf(search) > -1);
-});
-
-watch(state.columns, (new_value, old_value) => {
-    localStorage.setItem(local_storage_column_key, JSON.stringify(new_value))
-});
-
-onMounted(async () => {
-    getClients();
-
-    let columns = localStorage.getItem(local_storage_column_key);
-    if(columns){
-        columns = JSON.parse(columns);
-        for(const column_name in columns){
-            state.columns[column_name] = columns[column_name];
+    const tag_filter_options = computed(() => {
+        if( !state.tag_filter_terms )
+        {
+            return props.tags;
         }
-    }
-});
 
-/*
-onMounted(() => {
-    getClients();
+        const search = state.tag_filter_terms.toLowerCase();
 
-    let columns = localStorage.getItem(local_storage_column_key);
-    if(columns){
-        columns = JSON.parse(columns);
-        for(const column_name in columns){
-            state.columns[column_name] = columns[column_name];
-        }
-    }
-});
-*/
+        return props.tags.filter(t => t.name.toLowerCase().indexOf(search) > -1);
+    });
 
-// ==============
-// SETTINGS MODAL
-// ==============
-function openSettings(){
-    state.showSettingsModal = true;
-}
+    watch(state.columns, (new_value, old_value) => {
+        localStorage.setItem(local_storage_column_key, JSON.stringify(new_value))
+    });
 
-function closeSettings(){
-    state.showSettingsModal = false;
-}
-// ==============
+    onMounted(async () => {
+        getClients();
 
-function updateFilteredTagChips(tag){
-    let found = false;
-
-    for (let i = 0; i < state.filtered_tag_chips.length; i++) {
-        if (state.filtered_tag_chips[i].id == tag.id) {
-            found = true;
-        }
-    }
-
-    if( found) return;
-
-    state.filtered_tag_chips.push(JSON.parse(JSON.stringify(tag)));
-
-    getClients();
-}
-
-function removeChip(chip) {
-    // remove from chips
-    state.filtered_tag_chips = state.filtered_tag_chips
-        .filter(c => c.id != chip.id);
-
-    getClients();
-
-}
-
-function getClients(page = state.pagination.current_page) {
-    state.filters.tags = state.filtered_tag_chips.map(tag => tag.id)
-
-    axios.post('/clients/grid-data', {
-        filters: state.filters,
-        config: {
-            per_page: state.pagination.per_page,
-        },
-        page,
-    })
-        .then(res => {
-            state.pagination.total_number_of_pages = res.data.clients.last_page
-            state.pagination.current_page = res.data.clients.current_page
-            state.clients = res.data.clients.data
-        })
-        .catch(err => {
-            //debugger
-            console.log(err);
-        })
-
-
-}
-
-function newClient_init() {
-    state.client = newClient();
-    state.editing_client = null;
-    state.isEdit = false;
-
-    state.showModal = true;
-}
-
-function closeForm(){
-    this.cancelEdit();
-    state.showModal = false;
-}
-
-function cancelEdit() {
-    state.editing_client = null
-    state.client = newClient()
-    state.selected_tags = []
-}
-
-function newClient() {
-    return {
-        name_first: null,
-        name_last: null,
-        description: null,
-        email: null,
-    }
-}
-
-function editClient(_client) {
-    // avoid mutating by reference
-    state.editing_client = JSON.parse(JSON.stringify(_client))
-    state.client = JSON.parse(JSON.stringify(_client))
-    state.selected_tags = state.client.tags.map(t => t.id)
-    state.isEdit = true;
-    
-    //state.modal_client_form.show()
-    state.showModal = true;
-}
-
-function deleteClient_init(client) {
-    state.editing_client = null
-    state.deleting_client = client
-
-    //state.modal_client_delete_confirm.show()
-    state.showDeleteModal = true;
-}
-
-function deleteClient() {
-
-    axios.delete(route('clients_delete', { client: state.deleting_client.id }))
-    .then(res => {
-
-        state.clients = state.clients.filter(k => k.id != state.deleting_client.id)
-
-        state.deleting_client = null
-
-        //state.modal_client_delete_confirm.hide()
-        state.showDeleteModal = false;
-    })
-    .catch(err => {
-        debugger
-    })
-}
-
-function saveClient() {
-    if (state.editing_client && state.editing_client.id) {
-
-        axios.put(
-            route('clients_update', { client: state.editing_client.id }),
-            {
-                name_first: state.client.name_first,
-                name_last: state.client.name_last,
-                description: state.client.description,
-                email: state.client.email,
-                tags: state.selected_tags,
+        let columns = localStorage.getItem(local_storage_column_key);
+        if(columns){
+            columns = JSON.parse(columns);
+            for(const column_name in columns){
+                state.columns[column_name] = columns[column_name];
             }
-        )
+        }
+    });
+
+    /*
+    onMounted(() => {
+        getClients();
+
+        let columns = localStorage.getItem(local_storage_column_key);
+        if(columns){
+            columns = JSON.parse(columns);
+            for(const column_name in columns){
+                state.columns[column_name] = columns[column_name];
+            }
+        }
+    });
+    */
+
+    // ==============
+    // SETTINGS MODAL
+    // ==============
+    function openSettings(){
+        state.showSettingsModal = true;
+    }
+
+    function closeSettings(){
+        state.showSettingsModal = false;
+    }
+    // ==============
+
+    function updateFilteredTagChips(tag){
+        let found = false;
+
+        for (let i = 0; i < state.filtered_tag_chips.length; i++) {
+            if (state.filtered_tag_chips[i].id == tag.id) {
+                found = true;
+            }
+        }
+
+        if( found) return;
+
+        state.filtered_tag_chips.push(JSON.parse(JSON.stringify(tag)));
+
+        getClients();
+    }
+
+    function removeChip(chip) {
+        // remove from chips
+        state.filtered_tag_chips = state.filtered_tag_chips
+            .filter(c => c.id != chip.id);
+
+        getClients();
+
+    }
+
+    function getClients(page = state.pagination.current_page) {
+        state.filters.tags = state.filtered_tag_chips.map(tag => tag.id)
+
+        axios.post('/clients/grid-data', {
+            filters: state.filters,
+            config: {
+                per_page: state.pagination.per_page,
+            },
+            page,
+        })
             .then(res => {
-
-                //state.modal_client_form.hide()
-                state.showModal = false;
-                
-                const k = res.data.client
-
-                for (let i = 0; i < state.clients.length; i++) {
-                    if (state.clients[i].id === k.id) {
-                        state.clients[i] = k
-                    }
-                }
+                state.pagination.total_number_of_pages = res.data.clients.last_page
+                state.pagination.current_page = res.data.clients.current_page
+                state.clients = res.data.clients.data
             })
             .catch(err => {
                 //debugger
                 console.log(err);
             })
 
-        cancelEdit()
-        return
+
     }
 
-    axios.post(route('clients_store'), {
-        name_first: state.client.name_first,
-        name_last: state.client.name_last,
-        description: state.client.description,
-        email: state.client.email,
-        tags: state.selected_tags,
-    })
+    function newClient_init() {
+        state.client = newClient();
+        state.editing_client = null;
+        state.isEdit = false;
+
+        state.showModal = true;
+    }
+
+    function closeForm(){
+        this.cancelEdit();
+        state.showModal = false;
+    }
+
+    function cancelEdit() {
+        state.editing_client = null
+        state.client = newClient()
+        state.selected_tags = []
+    }
+
+    function newClient() {
+        return {
+            name_first: null,
+            name_last: null,
+            description: null,
+            email: null,
+        }
+    }
+
+    function editClient(_client) {
+        // avoid mutating by reference
+        state.editing_client = JSON.parse(JSON.stringify(_client))
+        state.client = JSON.parse(JSON.stringify(_client))
+        state.selected_tags = state.client.tags.map(t => t.id)
+        state.isEdit = true;
+        
+        //state.modal_client_form.show()
+        state.showModal = true;
+    }
+
+    function deleteClient_init(client) {
+        state.editing_client = null
+        state.deleting_client = client
+
+        //state.modal_client_delete_confirm.show()
+        state.showDeleteModal = true;
+    }
+
+    function deleteClient() {
+
+        axios.delete(route('clients_delete', { client: state.deleting_client.id }))
         .then(res => {
 
-            // clear the form
-            state.client = newClient()
-            state.clients.push(res.data.client)
+            state.clients = state.clients.filter(k => k.id != state.deleting_client.id)
 
-            state.modal_client_form.hide()
+            state.deleting_client = null
+
+            //state.modal_client_delete_confirm.hide()
+            state.showDeleteModal = false;
         })
         .catch(err => {
             debugger
         })
+    }
 
-}
+    function saveClient() {
+        if (state.editing_client && state.editing_client.id) {
+
+            axios.put(
+                route('clients_update', { client: state.editing_client.id }),
+                {
+                    name_first: state.client.name_first,
+                    name_last: state.client.name_last,
+                    description: state.client.description,
+                    email: state.client.email,
+                    tags: state.selected_tags,
+                }
+            )
+                .then(res => {
+
+                    //state.modal_client_form.hide()
+                    state.showModal = false;
+                    
+                    const k = res.data.client
+
+                    for (let i = 0; i < state.clients.length; i++) {
+                        if (state.clients[i].id === k.id) {
+                            state.clients[i] = k
+                        }
+                    }
+                })
+                .catch(err => {
+                    //debugger
+                    console.log(err);
+                })
+
+            cancelEdit()
+            return
+        }
+
+        axios.post(route('clients_store'), {
+            name_first: state.client.name_first,
+            name_last: state.client.name_last,
+            description: state.client.description,
+            email: state.client.email,
+            tags: state.selected_tags,
+        })
+            .then(res => {
+
+                // clear the form
+                state.client = newClient()
+                state.clients.push(res.data.client)
+
+                state.modal_client_form.hide()
+            })
+            .catch(err => {
+                debugger
+            })
+
+    }
 </script>
 
 <template>
