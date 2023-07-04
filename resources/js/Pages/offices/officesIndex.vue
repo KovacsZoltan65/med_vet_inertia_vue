@@ -96,7 +96,13 @@
         openDelete();
     }
     function deleteOffice(){
-        
+        axios.delete(route('offices_delete', { office: state.deleteing_office.id }))
+        .then(res => {
+            state.offices = state.offices.filter(o => o.id !== state.deleteing_office.id);
+            state.deleteing_office = null;
+            closeDelete();
+        })
+        .catch(err => { console.log(err); });
     }
 
     function updateFilteredTagChips(tag){
