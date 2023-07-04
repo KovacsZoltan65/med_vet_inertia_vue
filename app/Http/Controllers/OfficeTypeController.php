@@ -2,18 +2,79 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\OfficeType;
 use App\Http\Requests\StoreOfficeTypeRequest;
 use App\Http\Requests\UpdateOfficeTypeRequest;
 
 class OfficeTypeController extends Controller
 {
+    public function __construct() {
+        //$this->authorizeResource(OfficeType::class);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $types = OfficeType::query()->paginate(config('app.page_lines'));
+        
+        $params = [
+            'filters' => [],
+            'data' => [],
+        ];
+        
+        return inertia::render('officetypes/typeIndex', $params);
+    }
+    
+    public function gridData(Request $request){
+        $filter = $request->get('filter', []);
+        $config = $request->get('config', []);
+        
+        $query = OfficeType::query();
+        
+        if( count($filters) > 0 ){
+        
+            if( $search = ($filters['search'] ?? null) ){
+                $terms_cleaned = preg_replace("/[^a-zA-Z0-9\(\)\-\+\_@\.]+/", " ", $search);
+                $terms = array_reduce(
+                    explode(' ', $terms_cleaned), 
+                    function($carry, $term){
+                        $term = trim($term);
+                        if( !empty($term) ){
+                            $carry[] = strtolower($term);
+                        }
+                        return $carry;
+                    }, 
+                    []
+                );
+                if( count($terms) > 0 ){
+                    $query->where(function($q) use($terms) {
+                        $whereType = 'where';
+                        foreach( $terms as $term ){
+                            $q->{$whereType}('name', 'LIKE', '%' . $term . '%');
+                        }
+                    });
+                }
+            }
+
+            if( $tags = ($filters['tags'] ?? null) ){
+                $whereType = $search ? 'whereOr' : 'where';
+
+                $query->{$whereType}(function($query) use($tags) {
+                    $query->whereHas('tags', function($q) use($tags) {
+                        $q->whereIn('tags.id', $tags);
+                    });
+                });
+            }
+        }
+        $officeTypes = $query->get();
+        
+        return response()
+            ->json([
+                'officeTypes' => $officeTypes,
+            ], Response::HTTP_OK);
     }
 
     /**
