@@ -14,8 +14,12 @@ class Office extends Model
     protected $fillable = ['name', 'type_id'];
 
     public function type(){
+        return $this->hasOne(OfficeType::class, 'id', 'type_id');
+    }
+    
+    //public function type(){
         
-        $types = \App\Enums\OfficeType::toArray();
+        //$types = \App\Enums\OfficeType::toArray();
         
         //dd(
         //    $types, 
@@ -23,6 +27,6 @@ class Office extends Model
         //    \App\Enums\OfficeType::toArray()[$this->type_id - 1]
         //);
         
-        return \App\Enums\OfficeType::toArray()[$this->type_id - 1];
-    }
+        //return \App\Enums\OfficeType::toArray()[$this->type_id - 1];
+    //}
 }
