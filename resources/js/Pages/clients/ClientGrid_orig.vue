@@ -204,11 +204,11 @@ function deleteClient() {
     axios.delete(route('clients_delete', { client: state.deleting_client.id }))
         .then(res => {
 
-            state.clients = state.clients.filter(k => k.id != state.deleting_client.id)
+            state.clients = state.clients.filter(k => k.id != state.deleting_client.id);
 
-            state.deleting_client = null
+            state.deleting_client = null;
 
-            state.modal_client_delete_confirm.hide()
+            state.modal_client_delete_confirm.hide();
 
         })
         .catch(err => {
