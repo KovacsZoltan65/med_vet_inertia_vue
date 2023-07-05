@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Models\OfficeType;
 use App\Http\Requests\StoreOfficeTypeRequest;
 use App\Http\Requests\UpdateOfficeTypeRequest;
+use Inertia\Inertia;
 
 class OfficeTypeController extends Controller
 {
@@ -18,22 +19,21 @@ class OfficeTypeController extends Controller
      */
     public function index()
     {
-        $types = OfficeType::query()->paginate(config('app.page_lines'));
+        //$types = OfficeType::query()->paginate(config('app.page_lines'));
         
         $params = [
-            'filters' => [],
-            'data' => [],
+            'tags' => [],
         ];
         
-        return inertia::render('officetypes/typeIndex', $params);
+        return Inertia::render('office_types/typeIndex', $params);
     }
     
     public function gridData(Request $request){
-        $filter = $request->get('filter', []);
+        $filters = $request->get('filter', []);
         $config = $request->get('config', []);
         
         $query = OfficeType::query();
-        
+        /*
         if( count($filters) > 0 ){
         
             if( $search = ($filters['search'] ?? null) ){
@@ -69,11 +69,12 @@ class OfficeTypeController extends Controller
                 });
             }
         }
-        $officeTypes = $query->get();
-        
+        */
+        //$officeTypes = $query->paginate($config['per_page'])->get();
+        $officeTypes = $query->paginate($config['per_page']);
         return response()
             ->json([
-                'officeTypes' => $officeTypes,
+                'office_types' => $officeTypes,
             ], Response::HTTP_OK);
     }
 

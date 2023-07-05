@@ -127,8 +127,10 @@ Route::middleware([
     // -------------
     // OFFICE TYPES
     // -------------
-    Route::get('/get_office_types', [EnumController::class, 'getOfficeTypesEnum'])
-        ->name('get_office_types');
+    Route::post('/office_types/grid-data', [\App\Http\Controllers\OfficeTypeController::class, 'gridData'])->name('office_types_grid_data');
+    Route::resource('/office_types', \App\Http\Controllers\OfficeTypeController::class)->names([
+        'index' => 'office_types',
+    ]);
 
     // -------------
     // HUMANS

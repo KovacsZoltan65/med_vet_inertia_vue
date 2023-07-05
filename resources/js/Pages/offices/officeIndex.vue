@@ -4,12 +4,14 @@
     import VPagination from '@hennge/vue3-pagination';
     import '@hennge/vue3-pagination/dist/vue3-pagination.css';
 
-    import Modal from '../../Shared/Modal.vue';
+    //import Modal from '../../Shared/Modal.vue';
 
     import AppLayout from '../../Layouts/AppLayout.vue';
     import DialogModal from '../../Components/DialogModal.vue';
 
     import AddButton from '../../Components/buttons/AddButton.vue';
+
+    import SorterIcon from '../../Components/icons/SorterIcon.vue';
 
     const local_storage_column_key = 'ln_offices_columns';
 
@@ -141,7 +143,7 @@
             state.pagination.current_page = res.data.offices.current_page;
             state.offices = res.data.offices.data;
         } )
-        .error( err => { console.log(err); } );
+        .catch( err => { console.log(err); } );
     }
 
     function openSettings(){ state.modal_settings = true; }
@@ -199,8 +201,8 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
                     <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
                         <div class="grid grid-cols-2 gap-2 mb-4">
+
                             <!-- FILTER -->
-                            
                             <div class="flex items-center justify-right rounded bg-gray-50 h-28 dark:bg-gray-800">
                                 <label for="countries_multiple" 
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
