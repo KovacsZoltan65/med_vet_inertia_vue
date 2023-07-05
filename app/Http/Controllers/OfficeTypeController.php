@@ -28,12 +28,16 @@ class OfficeTypeController extends Controller
         return Inertia::render('office_types/typeIndex', $params);
     }
     
+    public function editData($id) {
+        dd($id);
+    }
+    
     public function gridData(Request $request){
         $filters = $request->get('filter', []);
         $config = $request->get('config', []);
         
         $query = OfficeType::query();
-        /*
+        
         if( count($filters) > 0 ){
         
             if( $search = ($filters['search'] ?? null) ){
@@ -69,7 +73,7 @@ class OfficeTypeController extends Controller
                 });
             }
         }
-        */
+        
         //$officeTypes = $query->paginate($config['per_page'])->get();
         $officeTypes = $query->paginate($config['per_page']);
         return response()

@@ -96,6 +96,11 @@
         })
         .catch(err => { console.log(err); });
     };
+    
+    function getOfficeType(){
+        //
+    }
+
     function updateFilteredTagChips(tag){
         let found = false;
 
@@ -138,6 +143,7 @@
     function editType(type){
         state.editing_type = JSON.parse(JSON.stringify(type));
         state.type = state.editing_type;
+        console.log('state.type',state.type);
         //state.selected_tags = state.type.tags.map(t => t.id);
         state.isEdit = true;
 
