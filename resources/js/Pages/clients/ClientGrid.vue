@@ -173,9 +173,7 @@
             .catch(err => {
                 //debugger
                 console.log(err);
-            })
-
-
+            });
     }
 
     function newClient_init() {
