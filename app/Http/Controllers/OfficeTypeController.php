@@ -28,8 +28,14 @@ class OfficeTypeController extends Controller
         return Inertia::render('office_types/typeIndex', $params);
     }
     
-    public function editData($id) {
-        dd($id);
+    public function editData() {
+        $officeType = request()->get('office_type');
+
+        $type = OfficeType::find($officeType['id']);
+        
+        return response()->json([
+            'office_type' => $type,
+        ], Response::HTTP_OK);
     }
     
     public function gridData(Request $request){
@@ -85,48 +91,46 @@ class OfficeTypeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    public function create(Request $request){}
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOfficeTypeRequest $request)
-    {
-        //
+    public function store(StoreOfficeTypeRequest $request){
+        OfficeType::create($request->all());
+
+        return redirect()->back()
+            ->with('message', 'OfficeType created');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(OfficeType $officeType)
-    {
-        //
-    }
+    public function show(OfficeType $officeType){}
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OfficeType $officeType)
-    {
-        //
-    }
+    public function edit(OfficeType $officeType){}
 
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateOfficeTypeRequest $request, OfficeType $officeType)
     {
-        //
+        $officeType->update($request->all());
+
+        return redirect()->back()
+            ->with('message', 'OfficeType updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OfficeType $officeType)
-    {
-        //
+    public function destroy(OfficeType $officeType){
+        $officeType->delete();
+
+        return redirect()->back()
+            ->with('message', 'OfficeType deleted');
     }
 }

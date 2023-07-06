@@ -97,8 +97,14 @@
         .catch(err => { console.log(err); });
     };
     
-    function getOfficeType(){
+    function getOfficeType(type){
         //
+        console.log(type);
+        axios.post(route('get_office_type', {office_type: type}))
+            .then(res => {
+                console.log('res', res);
+            })
+            .catch(err => { console.log(err); });
     }
 
     function updateFilteredTagChips(tag){
@@ -141,13 +147,15 @@
         closeEditModal();
     };
     function editType(type){
-        state.editing_type = JSON.parse(JSON.stringify(type));
-        state.type = state.editing_type;
-        console.log('state.type',state.type);
-        //state.selected_tags = state.type.tags.map(t => t.id);
-        state.isEdit = true;
+        getOfficeType(type);
+        
+        //state.editing_type = JSON.parse(JSON.stringify(type));
+        //state.type = state.editing_type;
+        //console.log('state.type',state.type);
+        
+        //state.isEdit = true;
 
-        openEditModal();
+        //openEditModal();
     };
     function deleteType_init(type){
         state.editing_type = null;

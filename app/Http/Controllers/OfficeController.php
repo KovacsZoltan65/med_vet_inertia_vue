@@ -50,9 +50,7 @@ class OfficeController extends Controller {
     /**
      * Display the specified resource.
      */
-    public function show(Office $office) {
-        
-    }
+    public function show(Office $office) {}
 
     /**
      * Update the specified resource in storage.
@@ -61,7 +59,7 @@ class OfficeController extends Controller {
         $office->update($request->all());
 
         return redirect()->back()
-                        ->with('message', 'Office updated');
+            ->with('message', 'Office updated');
     }
 
     /**

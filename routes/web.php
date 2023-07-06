@@ -127,7 +127,16 @@ Route::middleware([
     // -------------
     // OFFICE TYPES
     // -------------
-    Route::post('/office_types/grid-data', [\App\Http\Controllers\OfficeTypeController::class, 'gridData'])->name('office_types_grid_data');
+    Route::post(
+        '/office_types/grid-data', 
+        [\App\Http\Controllers\OfficeTypeController::class, 'gridData']
+        )->name('office_types_grid_data');
+    
+    Route::post(
+        '/office_types/get_office_type', 
+        [App\Http\Controllers\OfficeTypeController::class, 'editData']
+    )->name('get_office_type');
+    
     Route::resource('/office_types', \App\Http\Controllers\OfficeTypeController::class)->names([
         'index' => 'office_types',
     ]);

@@ -23,6 +23,7 @@ class StoreOfficeTypeRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'label' => 'required',
         ];
     }
 }
