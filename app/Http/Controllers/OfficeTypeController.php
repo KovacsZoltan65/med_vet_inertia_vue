@@ -33,7 +33,7 @@ class OfficeTypeController extends Controller
         $config = $request->get('config', []);
         
         $query = OfficeType::query();
-        /*
+        
         if( count($filters) > 0 ){
         
             if( $search = ($filters['search'] ?? null) ){
@@ -69,7 +69,7 @@ class OfficeTypeController extends Controller
                 });
             }
         }
-        */
+        
         //$officeTypes = $query->paginate($config['per_page'])->get();
         $officeTypes = $query->paginate($config['per_page']);
         return response()
