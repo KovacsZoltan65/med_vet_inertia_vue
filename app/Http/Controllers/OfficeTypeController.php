@@ -28,6 +28,10 @@ class OfficeTypeController extends Controller
         return Inertia::render('office_types/typeIndex', $params);
     }
     
+    public function editData($id) {
+        dd($id);
+    }
+    
     public function gridData(Request $request){
         $filters = $request->get('filter', []);
         $config = $request->get('config', []);
