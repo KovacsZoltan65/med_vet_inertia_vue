@@ -99,10 +99,12 @@
     
     function getOfficeType(type){
         //
-        console.log(type);
         axios.post(route('get_office_type', {office_type: type}))
             .then(res => {
-                console.log('res', res);
+                state.type = res.data.office_type;
+                state.isEdit = true;
+                openEditModal();
+                //return res.data.office_type;
             })
             .catch(err => { console.log(err); });
     }
@@ -129,39 +131,56 @@
 
         getOfficeTypes();
     }
+    // ------------------------
+    // Új típus előkészítése
+    // ------------------------
     function newType_init() {
         state.type = newType();
         state.editing_type = null;
         state.isEdit = false;
         state.showEditModal = true;
     };
+    // ------------------------
+    // Új típus
+    // ------------------------
     function newType() {
         return {
-            name: null
+            name: null,
+            label: null,
         };
     };
+    // ------------------------
+    // Szerkesztés megszakítása
+    // ------------------------
     function cancelEdit(){
         state.editing_type = null;
         state.type = newType();
         state.selected_tags = [];
         closeEditModal();
     };
+    // ------------------------
+    // Szerkesztés kezdete
+    // ------------------------
     function editType(type){
         getOfficeType(type);
+        //type = getOfficeType(type);
         
-        //state.editing_type = JSON.parse(JSON.stringify(type));
-        //state.type = state.editing_type;
-        //console.log('state.type',state.type);
-        
+        //state.type = type;
+        //state.type = res.data.office_type;
         //state.isEdit = true;
-
         //openEditModal();
     };
+    // ------------------------
+    // Törlés előkészítése
+    // ------------------------
     function deleteType_init(type){
         state.editing_type = null;
         state.deleting_type = type;
         state.showDeleteModal = true;
     }
+    // ------------------------
+    // Törlés
+    // ------------------------
     function deleteType(){
         axios.delete(route('/office_types/delete'), {client:state.deleting_type.id})
         .then(res => {
@@ -171,17 +190,19 @@
         })
         .catch(err => { console.log(err); });
     }
+    // ------------------------
+    // Törlés megszakítása
+    // ------------------------
     function cancelDelete(){
         state.deleting_type = null;
         state.showDeleteModal = false;
     }
+    // ------------------------
+    // Mentés
+    // ------------------------
     function saveType(){
         if(state.editing_type && state.editing_type.id){
-            axios.put(
-                route('/office_types/update'), 
-                {type:state.editing_type.id}, 
-                { name: state.type.name }
-            )
+            axios.put(route('/office_types/update'), {type:state.editing_type.id}, { name: state.type.name })
             .then(res => {
                 const t = res.data.type;
                 for(let i = 0; i < state.types.length; i++){
@@ -325,7 +346,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
 
-                    <SecondaryButton @click="openSettings">
+                    <SecondaryButton @click="openSettingsModal()">
                         Settings
                     </SecondaryButton>
 
@@ -402,76 +423,105 @@
                             active-color="#DCEDFF"
                             @update:model-value="getOfficeTypes"/>
                     </div>
-
-                    <!-- Settings Modal -->
-                    <DialogModal></DialogModal>
-
-                    <!-- Type Modal -->
-                    <DialogModal :show="state.showEditModal" id="modal_edit">
-                        <template #title>
-                            <span>{{ state.isEdit ? 'Edit' : 'Create' }} Office Type</span>
-                        </template>
-
-                        <template #content>
-                            
-                            <!-- NAME -->
-                            <div class="mb-6">
-                                <label for="name" 
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >Name</label>
-                                <input type="text" id="name" 
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    placeholder="" 
-                                    v-model="state.type.name" required>
-                            </div>
-
-                            <!-- LABEL -->
-                            <div class="mb-6">
-                                <label for="name" 
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >Label</label>
-                                <input type="text" id="label" 
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    placeholder="" 
-                                    v-model="state.type.label" required>
-                            </div>
-                        </template>
-
-                        <template #footer>
-                            <SecondaryButton @click="cancelEdit()">
-                                Cancel
-                            </SecondaryButton>
-                            
-                            <PrimaryButton type="button" class="ml-3" 
-                                           @click="saveType">
-                                {{ state.isEdit ? 'Edit' : 'Create' }}
-                            </PrimaryButton>
-                        </template>
-                    </DialogModal>
-
-                    <!-- Confirm Delete Modal --->
-                    <DialogModal :show="state.showDeleteModal" 
-                                 id="modal_confirm_delete">
-                        <template #title>
-                            Delete Office Type
-                        </template>
-                        <template #content>
-                            Are you sure you want to delete this type?
-                        </template>
-                        <template #footer>
-                            <PrimaryButton type="button" class="btn btn-danger" 
-                                           @click="deleteType_init(type)">
-                                Delete
-                            </PrimaryButton>
-                            <SecondaryButton type="button" class="self-start"
-                                             @click="cancelDelete()">
-                                Cancel
-                            </SecondaryButton>
-                        </template>
-                    </DialogModal>
                 </div>
             </div>
         </div>
+
+        <!-- Settings Modal -->
+        <DialogModal :show="state.showSettingsModal" id="modal_settings">
+            <template #title>
+                Settings
+            </template>
+
+            <template #content>
+                <fieldset>
+                    <legend class="sr-only">Checkbox variants</legend>
+
+                    <div class="flex items-center mb-4" 
+                         v-for="(config, column) in state.columns" 
+                         :key="column">
+
+                        <input v-model="config.is_visible" 
+                               :id="column" type="checkbox" value=""
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label :for="column" 
+                               class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >{{ config.label }}</label>
+                    </div>
+
+                </fieldset>
+            </template>
+
+            <template #footer>
+                <SecondaryButton @click="closeSettingsModal">
+                    Close
+                </SecondaryButton>
+            </template>
+        </DialogModal>
+
+        <!-- Type Modal -->
+        <DialogModal :show="state.showEditModal" id="modal_edit">
+            <template #title>
+                <span>{{ state.isEdit ? 'Edit' : 'Create' }} Office Type</span>
+            </template>
+
+            <template #content>
+                
+                <!-- NAME -->
+                <div class="mb-6">
+                    <label for="name" 
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Name</label>
+                    <input type="text" id="name" 
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        placeholder="" 
+                        v-model="state.type.name" required>
+                </div>
+
+                <!-- LABEL -->
+                <div class="mb-6">
+                    <label for="name" 
+                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Label</label>
+                    <input type="text" id="label" 
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        placeholder="" 
+                        v-model="state.type.label" required>
+                </div>
+            </template>
+
+            <template #footer>
+                <SecondaryButton @click="cancelEdit()">
+                    Cancel
+                </SecondaryButton>
+                
+                <PrimaryButton type="button" class="ml-3" 
+                            @click="saveType">
+                    {{ state.isEdit ? 'Edit' : 'Create' }}
+                </PrimaryButton>
+            </template>
+        </DialogModal>
+
+        <!-- Confirm Delete Modal --->
+        <DialogModal :show="state.showDeleteModal" 
+                    id="modal_confirm_delete">
+            <template #title>
+                Delete Office Type
+            </template>
+            <template #content>
+                Are you sure you want to delete this type?
+            </template>
+            <template #footer>
+                <PrimaryButton type="button" class="btn btn-danger" 
+                            @click="deleteType_init(type)">
+                    Delete
+                </PrimaryButton>
+                <SecondaryButton type="button" class="self-start"
+                                @click="cancelDelete()">
+                    Cancel
+                </SecondaryButton>
+            </template>
+        </DialogModal>
 
     </AppLayout>
 </template>
