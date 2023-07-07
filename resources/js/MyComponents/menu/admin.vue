@@ -93,6 +93,15 @@
                         </NavLink>
                     </li>
 
+                    <!-- ASYNC -->
+                    <li>
+                        <NavLink :href="route('async')" 
+                            :active="route().current('async')">
+                            <BookIcon class="w-4 h-4" />
+                            <span>Async</span>
+                        </NavLink>
+                    </li>
+
                     <!-- CLIENTS GRID -->
                     <li>
                         <NavLink :href="route('clients_grid')" 

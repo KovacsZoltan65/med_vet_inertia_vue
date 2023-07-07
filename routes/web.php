@@ -107,7 +107,7 @@ Route::middleware([
     //Route::put('/companies/{company}', [\App\Http\Controllers\CompanyController::class, 'update'])->name('companies_update');
     
 
-// Törlés
+    // Törlés
     Route::delete('/companies/delete', [\App\Http\Controllers\CompanyController::class, 'delete_company'])->name('companies_delete');
     Route::resource('companies', \App\Http\Controllers\CompanyController::class)->names([
         'index' => 'companies',
@@ -204,4 +204,10 @@ Route::middleware([
 
     // MODAL DEMO
     Route::get('/modal-demo', [PageController::class, 'modalDemo'])->name('modal-demo');
+    
+    // ASYNC
+    Route::get('/async', [App\Http\Controllers\AsyncController::class, 'index'])
+            ->name('async');
+    Route::post('/async_get_data', [App\Http\Controllers\AsyncController::class, 'get_data'])
+            ->name('async_get_data');
 });
