@@ -9,7 +9,7 @@
 </script>
 <template>
     <div>
-        <UserList></UserList>
+        <UserList />
     </div>
     <div>
         asdasdasd
